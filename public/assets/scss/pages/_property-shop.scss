@@ -1231,9 +1231,13 @@ input[type="radio"] {
 
     .detail-sidebar {
       margin-top: -100px;
+      position: sticky;
+      top: calc(120px + (140 - 120) * ((100vw - 320px) / (1920 - 320)));
 
       @media (max-width: 991px) {
         margin-top: calc(20px + (40 - 20) * ((100vw - 320px) / (1920 - 320)));
+        position: unset;
+        top: unset;
       }
     }
   }

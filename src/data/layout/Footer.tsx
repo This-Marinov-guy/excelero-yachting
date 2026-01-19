@@ -17,7 +17,7 @@ export const HeaderClassMapFooter: { [key: string]: string } = {
 };
 
 export const Details = [
-  'Excelero Yachting - Your premier destination for luxury yachting services, exceptional boats, and trusted partnerships.',
+  'Excelero Yachting - Yachting and more.',
   'Experience excellence in yachting with personalized service and world-class expertise.'
 ];
 

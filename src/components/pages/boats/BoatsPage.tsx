@@ -8,12 +8,6 @@ const BoatsPage = () => {
   return (
     <>
       <TopFilter />
-      <Breadcrumbs 
-        title="Boats" 
-        url={RouteList.Home.CarDemo1} 
-        mainClass="page-breadcrumbs-section" 
-        image 
-      />
       <GridView type={"property"} gridSize={4} cardShow={12} />
     </>
   );

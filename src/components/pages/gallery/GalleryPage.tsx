@@ -83,7 +83,7 @@ const GalleryPage = () => {
                       >
                         {({ ref, open }) => (
                           <div
-                            ref={ref as React.RefObject<HTMLDivElement>}
+                            ref={ref}
                             className="gallery-image-wrapper"
                             onClick={open}
                           >

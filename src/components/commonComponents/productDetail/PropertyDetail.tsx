@@ -1,3 +1,5 @@
+"use client";
+
 import { Sections } from "@/data/property";
 import { PropertyDetailType } from "@/types/Product";
 import UseStickyBar from "@/utils/UseStickyBar";
