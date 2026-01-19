@@ -7,7 +7,7 @@ import BoatListingCTA from "./BoatListingCTA";
 const CarHomeSection = () => {
   return (
     <>
-        <ExceleroHero />
+      <ExceleroHero />
       {/* <ServiceSection />
       <BoatListingCTA /> */}
       {/* <CarHomeFilter />     */}

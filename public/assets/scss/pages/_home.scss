@@ -2588,14 +2588,21 @@
         height: calc(180px + (220 - 180) * ((100vw - 320px) / (1920 - 320)));
         overflow: hidden;
         border-radius: 12px 12px 0 0;
+        isolation: isolate;
 
         @media (max-width: 767px) {
           height: calc(160px + (200 - 160) * ((100vw - 320px) / (767 - 320)));
         }
 
         .service-image {
+          position: absolute !important;
+          top: 0;
+          left: 0;
+          width: 100% !important;
+          height: 100% !important;
           object-fit: cover;
           transition: transform 0.5s ease;
+          z-index: 0;
         }
 
         .service-image-overlay {
@@ -2703,6 +2710,7 @@
     overflow: hidden;
     margin-top: 0;
     z-index: 1;
+    isolation: isolate;
 
     @media (max-width: 767px) {
       padding: calc(60px + (90 - 60) * ((100vw - 320px) / (767 - 320))) 0;
@@ -2715,9 +2723,16 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      overflow: hidden;
 
       .cta-bg-image {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
         object-fit: cover;
+        z-index: 0;
       }
 
       .cta-overlay {

@@ -8,7 +8,7 @@ import { ArrowRight } from "iconsax-react";
 const BoatListingCTA = () => {
   return (
     <section className="excelero-boat-listing-cta section-b-space">
-      <div className="cta-background">
+      <div>
         <Image
           src="/assets/images/hero/main2.png"
           alt="Excelero Yachting"
