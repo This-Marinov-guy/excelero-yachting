@@ -64,7 +64,9 @@
     "typescript": "^5"
   },
   "overrides": {
-    "react-popper>react": "^16.8.0 || ^17 || ^18 || ^19",
-    "react-popper>react-dom": "^16.8.0 || ^17 || ^18 || ^19"
+    "react-popper": {
+      "react": "^16.8.0 || ^17 || ^18 || ^19",
+      "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
+    }
   }
 }
