@@ -1,11 +1,11 @@
 import React from "react";
 import CarHomeFilter from "./filterSection";
-import SliderBanner from "./SliderBanner";
+import ExceleroHero from "./ExceleroHero";
 
 const CarHomeSection = () => {
   return (
     <div className='car-home-section' id="carHome">
-      <SliderBanner />
+      <ExceleroHero />
       <CarHomeFilter />    
     </div>
   );

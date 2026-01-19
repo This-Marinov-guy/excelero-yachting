@@ -1,10 +1,12 @@
 import { LoaderConfig } from "@/types/Layout";
+import ExceleroLoader from "@/components/commonComponents/ExceleroLoader";
 
 export const Loaders: Record<string, LoaderConfig> = {
-  "car-2": { src: "car2-loader.gif", text: "Loading Car rental Template. Please wait…" },
-  "job": { src: "job1-loader.gif", text: "Loading job rental Template. Please wait…" },
-  "job-2": { src: "job2-loader.gif", text: "Loading job rental Template. Please wait…" },
-  "job-3": { src: "job3-loader.gif", text: "Loading job rental Template. Please wait…" },
-  "property": { src: "Property-1.gif", text: "Loading Real estate Template. Please wait…" ,height:120,width:120},
-  "property-2": { src: "Property-2.gif", text: "Loading Real estate Template. Please wait…",height:120,width:120 },   
+  "car-2": { svg: <ExceleroLoader /> },
+  "job": { svg: <ExceleroLoader /> },
+  "job-2": { svg: <ExceleroLoader /> },
+  "job-3": { svg: <ExceleroLoader /> },
+  "property": { svg: <ExceleroLoader /> },
+  "property-2": { svg: <ExceleroLoader /> },
+  default: { svg: <ExceleroLoader /> },
 };

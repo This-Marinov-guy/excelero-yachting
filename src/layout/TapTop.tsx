@@ -19,7 +19,7 @@ const TapTop: React.FC<PathTypes> = ({ part }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isJobOrProperty = ["job", "property"].some((item) => part?.includes(item));
+  const isJobOrProperty = true;
 
   return (
     <div className={`tap-to-tap ${isJobOrProperty ? (part === 'job' ? "job-color-change" : "") : "car-top"} ${tapTopStyle ? " show" : ""}`}>

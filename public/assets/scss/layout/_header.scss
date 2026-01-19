@@ -8,7 +8,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 2;
+    z-index: 9999;
     transition: all 0.3s ease-in-out;
 
     &.sticky-header {
@@ -20,6 +20,16 @@ header {
         padding-bottom: calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320)));
         animation: slideDown 0.3s ease-in-out;
         color: #000;
+        z-index: 9999;
+
+        @media (max-width: 991px) {
+            position: absolute;
+            background: transparent;
+            box-shadow: none;
+            padding-top: calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
+            padding-bottom: 0;
+            animation: none;
+        }
 
         .header-flex {
             a,
@@ -678,6 +688,10 @@ header {
         gap: calc(8px + (30 - 8) * ((100vw - 320px) / (1920 - 320)));
 
         .header-logo {
+            @media (max-width: 991px) {
+                display: none;
+            }
+
             img {
                 width: 80px;
                 object-fit: contain;

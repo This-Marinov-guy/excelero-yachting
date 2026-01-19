@@ -13,7 +13,7 @@ const Loading: React.FC<PathTypes> = () => {
 
   const loaderKey = Object.keys(Loaders).find((key) => key.toLowerCase() === firstPart.toLowerCase());
 
-  const loaderContent = Loaders[loaderKey || ""]?.svg || (
+  const loaderContent = Loaders[loaderKey || ""]?.svg || Loaders["default"]?.svg || (
     <>
       <Image src={`${GifPath}/${Loaders[loaderKey || ""]?.src || "car1-loader.gif"}`} priority height={Loaders[loaderKey || ""]?.height || 47} width={Loaders[loaderKey || ""]?.width || 150} alt='loader' unoptimized className='img-fluid' />
       <h4>{Loaders[loaderKey || ""]?.text || "Loading Car rental Template. Please wait…"}</h4>
@@ -23,7 +23,7 @@ const Loading: React.FC<PathTypes> = () => {
   return (
     <>
       <div className='loader-wrapper'>
-        <div className={`${firstPart.includes("property") ? "property-loader" : `text-center ${firstPart.includes("job") ? "job-loader" : "car-loader"}`}`}>{loaderContent}</div>
+        <div className="text-center excelero-loader-wrapper">{loaderContent}</div>
       </div>
     </>
   );
