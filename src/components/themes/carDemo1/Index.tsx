@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import CarHomeSection from "./carHomeSection";
+import HomeSection from "./carHomeSection";
 import { useAppDispatch } from "@/redux/hooks";
 import { fetchCategoryApiData, fetchProductApiData } from "@/redux/reducers/ProductSlice";
 import Categories from "../common/category";
@@ -21,7 +21,7 @@ const CarDemo1Container = () => {
 
   return (
     <>
-      <CarHomeSection />
+      <HomeSection />
       {/* <Categories type="carDemo-1"/>
       <CarDemoProduct/>
       <Services/>

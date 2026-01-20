@@ -2411,10 +2411,10 @@
         margin-left: auto;
         margin-right: auto;
       }
-      margin-top: calc(22px + (54 - 22) * ((100vw - 320px) / (1920 - 320)));
+      margin-top: calc(18px + (40 - 18) * ((100vw - 320px) / (1920 - 320)));
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: calc(14px + (26 - 14) * ((100vw - 320px) / (1920 - 320)));
+      gap: calc(12px + (22 - 12) * ((100vw - 320px) / (1920 - 320)));
       align-items: stretch;
 
       @media (max-width: 991px) {
@@ -2432,15 +2432,24 @@
         position: relative;
         display: grid;
         grid-template-columns: minmax(110px, 170px) 1fr;
-        gap: 18px;
-        padding: calc(16px + (26 - 16) * ((100vw - 320px) / (1920 - 320)));
+        gap: 14px;
+        padding: calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
         text-decoration: none;
         color: rgba(var(--white), 1);
-        background: rgba(0, 0, 0, 0.78);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        // Blue glass gradient
+        background:
+          linear-gradient(
+            135deg,
+            rgba(var(--theme-color), 0.28) 0%,
+            rgba(0, 0, 0, 0.22) 45%,
+            rgba(var(--secondary-color), 0.12) 100%
+          );
+        border: 1px solid rgba(var(--theme-color), 0.28);
+        box-shadow:
+          0 14px 35px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         overflow: hidden;
         transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 
@@ -2456,7 +2465,9 @@
           content: "";
           position: absolute;
           inset: 0;
-          background: radial-gradient(1000px 400px at 15% 0%, rgba(var(--theme-color), 0.18) 0%, rgba(0,0,0,0) 60%);
+          background:
+            radial-gradient(900px 380px at 20% 0%, rgba(var(--theme-color), 0.28) 0%, rgba(0,0,0,0) 62%),
+            radial-gradient(900px 380px at 90% 100%, rgba(var(--secondary-color), 0.18) 0%, rgba(0,0,0,0) 60%);
           opacity: 0.9;
           z-index: 0;
           pointer-events: none;
@@ -2507,68 +2518,24 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          gap: 10px;
-        }
-
-        .geo-top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-
-        .geo-logo {
-          background: rgba(255, 255, 255, 0.92);
-          border-radius: 10px;
-          padding: 8px 10px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-        }
-
-        .geo-logo-img {
-          width: calc(110px + (150 - 110) * ((100vw - 320px) / (1920 - 320)));
-          height: auto;
-
-          @media (max-width: 575px) {
-            width: 120px;
-          }
-        }
-
-        .geo-eyebrow {
-          font-size: 12px;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.72);
+          gap: 6px;
         }
 
         .geo-title {
           margin: 0;
           color: rgba(var(--white), 1);
-          font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1920 - 320)));
-          font-weight: 700;
+          font-size: calc(17px + (22 - 17) * ((100vw - 320px) / (1920 - 320)));
+          font-weight: 600;
           line-height: 1.15;
           text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
         }
 
         .geo-text {
           margin: 0;
-          color: rgba(255, 255, 255, 0.78);
-          font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
-          line-height: 1.65;
-          max-width: 50ch;
-        }
-
-        .geo-cta {
-          margin-top: 6px;
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          color: rgba(var(--theme-color), 1);
-          font-weight: 600;
-
-          i {
-            font-size: 18px;
-          }
+          color: rgba(255, 255, 255, 0.8);
+          font-size: calc(13px + (15 - 13) * ((100vw - 320px) / (1920 - 320)));
+          line-height: 1.55;
+          max-width: 44ch;
         }
       }
     }

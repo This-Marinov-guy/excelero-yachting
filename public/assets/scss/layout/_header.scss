@@ -48,6 +48,30 @@ header {
         }
     }
 
+    // Transparent header while inside the home hero stack
+    body.hero-header-transparent & {
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+
+        .header-flex {
+            a,
+            i,
+            .iconsax {
+                color: rgba(var(--white), 1) !important;
+            }
+        }
+
+        .left-side-header {
+            .toggle {
+                i {
+                    color: rgba(var(--white), 1) !important;
+                }
+            }
+        }
+    }
+
     @keyframes slideDown {
         from {
             transform: translateY(-100%);
