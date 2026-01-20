@@ -64,7 +64,7 @@ export const Partners: Record<string, Partner> = {
     id: "zhik",
     name: "Zhik",
     heroImage: "/assets/images/hero/zhik.jpg",
-    logoImage: "/assets/images/logo/zhik.svg",
+    logoImage: "/assets/images/logo/zhik.jpg",
     breadcrumbImage: "/assets/images/breadcrumbs/zhik.jpg",
     affiliateLink: "https://zhik.com",
     primaryColor: "#000000",

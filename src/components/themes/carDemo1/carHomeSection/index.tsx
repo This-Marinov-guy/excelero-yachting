@@ -129,8 +129,8 @@ const CarHomeSection = () => {
     <>
       <div className="exelero-hero-scroll" ref={containerRef}>
         <ExceleroHero
-          title="X‑Yachts & Elvstrom Sails"
-          subtitle="Performance yachts & premium sails"
+          title="Performance and luxury yachts"
+          subtitle="From coastal cruising to offshore racing"
           backgroundVideo="/assets/video/hero/1.mp4"
           backgroundPoster="/assets/images/hero/x-yachts.jpg"
           overlayVariant="dark"
@@ -144,10 +144,10 @@ const CarHomeSection = () => {
               variant: "a",
             },
             {
-              name: "Elvstrom Sails",
+              name: "Omaya Yachts",
               description: "Premium sails and sail solutions for cruising and racing.",
-              thumbImage: "/assets/images/hero/elvstrom.jpg",
-              href: RouteList.Pages.Services.Sails,
+              thumbImage: "/assets/images/hero/omaya-yachts.jpg",
+              href: RouteList.Pages.Partners.OmayaYachts,
               variant: "b",
             },
           ]}

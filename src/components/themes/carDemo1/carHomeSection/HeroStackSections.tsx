@@ -117,7 +117,7 @@ const HeroStackSections = () => {
           name: "Zhik",
           description: "Technical gear trusted by sailors worldwide — engineered to perform.",
           thumbImage: "/assets/images/hero/zhik.jpg",
-          logoImage: "/assets/images/logo/zhik.svg",
+          logoImage: "/assets/images/logo/zhik.jpg",
           href: RouteList.Pages.Partners.Zhik,
           variant: "b",
         },

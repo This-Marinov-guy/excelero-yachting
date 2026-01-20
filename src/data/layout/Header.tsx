@@ -57,6 +57,13 @@ export const MenuItem = [
         image: "logo/x-yachts.png",
         active: false,
       },
+       {
+        title: "Omaya Yachts",
+        type: "link",
+        path: RouteList.Pages.Partners.OmayaYachts,
+        image: "logo/omaya-yachts.jpg",
+        active: false,
+      },
       {
         title: "Elvstrom",
         type: "link",
@@ -71,18 +78,12 @@ export const MenuItem = [
         image: "logo/elvstrom-sailwear.webp",
         active: false,
       },
-      {
-        title: "Omaya Yachts",
-        type: "link",
-        path: RouteList.Pages.Partners.OmayaYachts,
-        image: "logo/omaya-yachts.jpg",
-        active: false,
-      },
+     
       {
         title: "Zhik",
         type: "link",
         path: RouteList.Pages.Partners.Zhik,
-        image: "logo/zhik.svg",
+        image: "logo/zhik.jpg",
         active: false,
       },
     ],

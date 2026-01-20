@@ -56,7 +56,7 @@ const ExceleroHero = ({
             {description && <p className="hero-description">{description}</p>}
           </div>
 
-          <div className={`geo-panels ${single ? "geo-panels--single" : ""}`}>
+          <div className={`geo-panels ${single ? "geo-panels--single" : ""}`} style={{display: "flex", justifyContent: "center"}}>
             {panels.map((panel, idx) => {
               const variantClass = panel.variant === "a" ? "geo-panel--a" : "geo-panel--b";
 
