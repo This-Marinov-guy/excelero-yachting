@@ -67,18 +67,18 @@ const ServiceSection = () => {
   ];
 
   return (
-    <section className="excelero-services-section section-t-space section-b-space">
+    <section className="exelero-services-section section-t-space section-b-space">
       <Container>
         <CommonHeader 
           title="Our Services" 
-          content="Excelero Yachting offers comprehensive yachting services to meet all your maritime needs. From premium equipment to expert consultation, we provide end-to-end solutions for yacht owners and sailing enthusiasts." 
+          content="Exelero Yachting offers comprehensive yachting services to meet all your maritime needs. From premium equipment to expert consultation, we provide end-to-end solutions for yacht owners and sailing enthusiasts." 
           headClass="title-style-2" 
           animation 
         />
         <Row className="g-4 g-md-5">
           {services.map((service, index) => (
             <Col lg={4} md={6} sm={6} key={index}>
-              <Link href={service.link} className="excelero-service-card">
+              <Link href={service.link} className="exelero-service-card">
                 <div className="service-image-wrapper">
                   <Image
                     src={service.image}

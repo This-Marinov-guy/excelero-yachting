@@ -23,7 +23,7 @@ const Loading: React.FC<PathTypes> = () => {
   return (
     <>
       <div className='loader-wrapper'>
-        <div className="text-center excelero-loader-wrapper">{loaderContent}</div>
+        <div className="text-center exelero-loader-wrapper">{loaderContent}</div>
       </div>
     </>
   );

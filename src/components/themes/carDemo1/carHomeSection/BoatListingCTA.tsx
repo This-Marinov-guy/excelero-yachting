@@ -7,11 +7,11 @@ import { ArrowRight } from "iconsax-react";
 
 const BoatListingCTA = () => {
   return (
-    <section className="excelero-boat-listing-cta section-b-space">
+    <section className="exelero-boat-listing-cta section-b-space">
       <div>
         <Image
           src="/assets/images/hero/main2.png"
-          alt="Excelero Yachting"
+          alt="Exelero Yachting"
           fill
           className="cta-bg-image"
           style={{ objectFit: "cover" }}
@@ -24,7 +24,7 @@ const BoatListingCTA = () => {
             <div className="cta-content">
               <h2 className="cta-title">Have a Boat to Sell or Charter?</h2>
               <p className="cta-description">
-                List your vessel with Excelero Yachting and reach a global audience of yacht enthusiasts. 
+                List your vessel with Exelero Yachting and reach a global audience of yacht enthusiasts. 
                 Our expert team will help you showcase your boat and connect with the right buyers or charter clients.
               </p>
               <div className="cta-buttons">

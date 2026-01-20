@@ -1,5 +1,5 @@
 {
-  "name": "excelero-yachting",
+  "name": "exelero-yachting",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
     "lodash": "^4.17.21",
     "next": "15.1.11",
     "particles-bg": "^2.5.5",
+    "photoswipe": "^5.4.4",
     "react": "19.0.1",
     "react-apexcharts": "^1.7.0",
     "react-countup": "^6.5.3",
@@ -62,11 +63,5 @@
     "eslint-config-next": "15.1.4",
     "sass": "1.77.6",
     "typescript": "^5"
-  },
-  "overrides": {
-    "react-popper": {
-      "react": "^16.8.0 || ^17 || ^18 || ^19",
-      "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
-    }
   }
 }

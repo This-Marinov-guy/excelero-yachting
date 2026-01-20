@@ -17,12 +17,12 @@ export const HeaderClassMapFooter: { [key: string]: string } = {
 };
 
 export const Details = [
-  'Excelero Yachting - Yachting and more.',
+  'Exelero Yachting - Yachting and more.',
   'Experience excellence in yachting with personalized service and world-class expertise.'
 ];
 
 export const Copyright =( <div className='copyright'>
-  <p>@ {new Date().getFullYear()} Excelero Yachting. All Rights Reserved</p>
+  <p>@ {new Date().getFullYear()} Exelero Yachting. All Rights Reserved</p>
 </div>)
 
 export const ContactListData = [

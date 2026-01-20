@@ -9,14 +9,14 @@ const AboutPage = () => {
     <>
       <Breadcrumbs title='About Us' url={RouteList.Home.CarDemo1} mainClass='page-breadcrumbs-section' image />
 
-      <section className='section-b-space excelero-about-section'>
+      <section className='section-b-space exelero-about-section'>
         <Container>
           <Row className='align-items-center g-4 g-lg-5'>
             <Col lg={6}>
               <div className='about-hero-image'>
                 <Image
                   src='/assets/images/other/about/general.jpg'
-                  alt='Excelero Yachting'
+                  alt='Exelero Yachting'
                   width={900}
                   height={700}
                   className='img-fluid about-img'
@@ -27,9 +27,9 @@ const AboutPage = () => {
 
             <Col lg={6}>
               <div className='about-content'>
-                <h2 className='about-title'>Excelero Yachting</h2>
+                <h2 className='about-title'>Exelero Yachting</h2>
                 <p className='about-text'>
-                  Excelero Yachting is a premium yachting group focused on unforgettable experiences, trusted partnerships, and
+                  Exelero Yachting is a premium yachting group focused on unforgettable experiences, trusted partnerships, and
                   best-in-class service — from sailing and charters to sourcing boats and parts.
                 </p>
                 <p className='about-text'>

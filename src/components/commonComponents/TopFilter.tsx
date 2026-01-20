@@ -9,7 +9,7 @@ const TopFilter = () => {
       <div className="top-filter-background">
         <Image
           src="/assets/images/hero/main2.png"
-          alt="Excelero Yachting"
+          alt="Exelero Yachting"
           fill
           className="top-filter-bg-image"
           priority

@@ -39,11 +39,11 @@ const ExceleroHero = () => {
   ];
 
   return (
-    <div className="excelero-hero-section">
+    <div className="exelero-hero-section">
       <div className="hero-background">
         <Image
           src="/assets/images/hero/main2.png"
-          alt="Excelero Yachting"
+          alt="Exelero Yachting"
           fill
           className="hero-bg-image"
           priority
@@ -53,7 +53,7 @@ const ExceleroHero = () => {
       </div>
       <Container>
         <div className="hero-content">
-          <h1 className="hero-title">Excelero Group</h1>
+          <h1 className="hero-title">Exelero Group</h1>
           <h2 className="hero-subtitle">Yachting and more</h2>
           <Row className="hero-panels g-3 g-md-4">
             {brands.map((brand, index) => (
