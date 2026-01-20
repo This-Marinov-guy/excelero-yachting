@@ -1,153 +1,15 @@
-"use client";
-import React, { useEffect, useMemo, useRef } from "react";
+import React from "react";
 import CarHomeFilter from "./filterSection";
 import ExceleroHero from "./ExceleroHero";
 import ServiceSection from "./ServiceSection";
 import BoatListingCTA from "./BoatListingCTA";
 import { RouteList } from "@/utils/RouteList";
+import { HeroScrollWrapper } from "./HeroScrollWrapper";
 
 const CarHomeSection = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const isAnimatingRef = useRef(false);
-
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const getSections = () =>
-      Array.from(container.querySelectorAll<HTMLElement>(".exelero-hero-section"));
-
-    const scrollToIndex = (nextIndex: number) => {
-      const sections = getSections();
-      if (nextIndex < 0 || nextIndex >= sections.length) return;
-
-      const target = sections[nextIndex];
-      const top = target.offsetTop;
-
-      isAnimatingRef.current = true;
-      window.scrollTo({
-        top,
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-      });
-
-      window.setTimeout(() => {
-        isAnimatingRef.current = false;
-      }, prefersReducedMotion ? 150 : 650);
-    };
-
-    const getActiveIndex = () => {
-      const sections = getSections();
-      const y = window.scrollY;
-      let bestIdx = 0;
-      let bestDist = Number.POSITIVE_INFINITY;
-      sections.forEach((s, idx) => {
-        const top = s.offsetTop;
-        const dist = Math.abs(top - y);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = idx;
-        }
-      });
-      return bestIdx;
-    };
-
-    const getNextIndex = () => {
-      const sections = getSections();
-      const y = window.scrollY;
-      for (let i = 0; i < sections.length; i++) {
-        if (sections[i].offsetTop - 1 > y) return i;
-      }
-      return sections.length - 1;
-    };
-
-    const getPrevIndex = () => {
-      const sections = getSections();
-      const y = window.scrollY;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        if (sections[i].offsetTop + 1 < y) return i;
-      }
-      return 0;
-    };
-
-    const WHEEL_TRIGGER_THRESHOLD = 5; // almost any intentional scroll
-
-    const onWheel = (e: WheelEvent) => {
-      if (isAnimatingRef.current) return;
-
-      // Only when the wheel target is within this hero stack
-      const target = e.target as HTMLElement | null;
-      if (!target || !container.contains(target)) return;
-
-      if (Math.abs(e.deltaY) < WHEEL_TRIGGER_THRESHOLD) return;
-
-      e.preventDefault();
-      if (e.deltaY > 0) {
-        // scrolling down → next section strictly below current scroll
-        const nextIdx = getNextIndex();
-        scrollToIndex(nextIdx);
-      } else {
-        // scrolling up → previous section strictly above current scroll
-        const prevIdx = getPrevIndex();
-        scrollToIndex(prevIdx);
-      }
-    };
-
-    let touchStartY = 0;
-    const onTouchStart = (e: TouchEvent) => {
-      if (!container.contains(e.target as Node)) return;
-      touchStartY = e.touches[0]?.clientY ?? 0;
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (isAnimatingRef.current) return;
-      if (!container.contains(e.target as Node)) return;
-      const endY = (e.changedTouches[0]?.clientY ?? 0);
-      const delta = touchStartY - endY;
-      if (Math.abs(delta) < 40) return;
-      if (delta > 0) {
-        const nextIdx = getNextIndex();
-        scrollToIndex(nextIdx);
-      } else {
-        const prevIdx = getPrevIndex();
-        scrollToIndex(prevIdx);
-      }
-    };
-
-    // non-passive so preventDefault works
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-
-    const updateHeaderTransparency = () => {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      // "in hero": the hero stack occupies the viewport (at least partially)
-      const inHero = rect.top <= 0 && rect.bottom >= 80;
-      document.body.classList.toggle("hero-header-transparent", inHero);
-    };
-
-    updateHeaderTransparency();
-    window.addEventListener("scroll", updateHeaderTransparency, { passive: true });
-    window.addEventListener("resize", updateHeaderTransparency, { passive: true });
-
-    return () => {
-      window.removeEventListener("wheel", onWheel as any);
-      window.removeEventListener("touchstart", onTouchStart as any);
-      window.removeEventListener("touchend", onTouchEnd as any);
-      window.removeEventListener("scroll", updateHeaderTransparency as any);
-      window.removeEventListener("resize", updateHeaderTransparency as any);
-      document.body.classList.remove("hero-header-transparent");
-    };
-  }, [prefersReducedMotion]);
-
   return (
     <>
-      <div className="exelero-hero-scroll" ref={containerRef}>
+      <HeroScrollWrapper>
         <ExceleroHero
           title="Performance and luxury yachts"
           subtitle="From coastal cruising to offshore racing"
@@ -214,7 +76,7 @@ const CarHomeSection = () => {
             },
           ]}
         />
-      </div>
+      </HeroScrollWrapper>
 
       {/* <ServiceSection />
       <BoatListingCTA /> */}
