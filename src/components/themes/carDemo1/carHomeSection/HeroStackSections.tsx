@@ -83,7 +83,7 @@ const HeroStackSections = () => {
           description: "Browse listings, request brokerage support, or list your boat for charter.",
           thumbImage: "/assets/images/hero/boats.jpg",
           logos: [
-            { src: "/assets/images/favicons/favicon.ico", alt: "Excelero" },
+            { src: "/assets/images/favicons/favicon.ico", alt: "Exelero" },
             { src: "/assets/images/logo/x-yachts.png", alt: "X‑Yachts" },
           ],
           actions: [

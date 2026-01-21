@@ -44,8 +44,8 @@ const Property1DetailBox: FC<ProductCardType> = ({ data, view, wishlist, propert
             muted
             loop
             autoPlay>
-            <source src={data.video ? `${VideoPath}/${data.video}` : `${VideoPath}/1.mp4`} type='video/mp4' />
-            <source src={data.video ? `${VideoPath}/${data.video}` : `${VideoPath}/1.mp4`} type='video/ogg' />
+            <source src={data.video ? `${VideoPath}/${data.video}` : `${VideoPath}/main.m4v`} type='video/mp4' />
+            <source src={data.video ? `${VideoPath}/${data.video}` : `${VideoPath}/main.m4v`} type='video/ogg' />
           </video>
         </div>
       ) : (

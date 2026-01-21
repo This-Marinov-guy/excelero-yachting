@@ -6,7 +6,7 @@ const ExceleroLoader = () => {
     <div className="exelero-loader">
       <div className="loader-logo-wrapper">
         <Image
-          src="/assets/images/favicons/favicon.ico"
+          src="/assets/images/logo/1-transparent.png"
           alt="Exelero Yachting"
           width={1000}
           height={1000}

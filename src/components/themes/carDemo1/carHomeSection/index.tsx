@@ -32,7 +32,7 @@ const CarHomeSection = () => {
       panels: [
         {
           name: "Brokerage & Charters",
-          description: "Find your next boat or get your boat listed with Excelero.",
+          description: "Find your next boat or get your boat listed with Exelero.",
           thumbImage: "/assets/images/hero/boats.jpg",
           variant: "b" as const,
           href: RouteList.Pages.Boats,
@@ -65,7 +65,7 @@ const CarHomeSection = () => {
   return (
     <>
       <DynamicExceleroHero
-        backgroundVideo="/assets/video/hero/1.mp4"
+        backgroundVideo="/assets/video/hero/main.m4v"
         backgroundPoster="/assets/images/hero/x-yachts.jpg"
         sections={heroSections}
       />

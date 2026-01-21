@@ -56,7 +56,7 @@ const ExceleroHero = ({
             {description && <p className="hero-description">{description}</p>}
           </div>
 
-          <div className={`geo-panels ${single ? "geo-panels--single" : ""}`} style={{display: "flex", justifyContent: "center"}}>
+          <div className={`geo-panels ${single ? "geo-panels--single" : ""}`} style={{display: "flex", justifyContent: "center", overflowY: "hidden"}}>
             {panels.map((panel, idx) => {
               const variantClass = panel.variant === "a" ? "geo-panel--a" : "geo-panel--b";
 
@@ -67,6 +67,7 @@ const ExceleroHero = ({
                   className={`geo-panel ${variantClass}`}
                   data-aos="fade-up"
                   data-aos-duration={500 + idx * 150}
+                  style={{ overflowY: "hidden" }}
                 >
                   <div className="geo-thumb" aria-hidden="true">
                     <Image src={panel.thumbImage} alt={panel.name} fill className="geo-thumb-img" style={{ objectFit: "cover" }} />

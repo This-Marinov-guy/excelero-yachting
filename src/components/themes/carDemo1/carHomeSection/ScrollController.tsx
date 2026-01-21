@@ -5,12 +5,14 @@ interface ScrollControllerProps {
   currentIndex: number;
   totalSections: number;
   onSectionChange: (index: number) => void;
+  heroRef: React.RefObject<HTMLElement | null>;
 }
 
 export const ScrollController = ({
   currentIndex,
   totalSections,
   onSectionChange,
+  heroRef,
 }: ScrollControllerProps) => {
   const isAnimatingRef = useRef(false);
   const lastScrollTimeRef = useRef(0);
@@ -22,6 +24,15 @@ export const ScrollController = ({
   }, []);
 
   useEffect(() => {
+    const isHeroInFullView = () => {
+      if (!heroRef.current) return false;
+      const rect = heroRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Hero is in full view if it covers the entire viewport
+      return rect.top <= 0 && rect.bottom >= viewportHeight;
+    };
+
     const handleSectionChange = (newIndex: number) => {
       isAnimatingRef.current = true;
       onSectionChange(newIndex);
@@ -33,8 +44,8 @@ export const ScrollController = ({
     };
 
     const handleWheel = (e: WheelEvent) => {
-      // Allow normal scrolling if at last section
-      if (currentIndex === totalSections - 1 && e.deltaY > 0) {
+      // Only apply custom scroll behavior when hero is in full view
+      if (!isHeroInFullView()) {
         return;
       }
 
@@ -57,11 +68,14 @@ export const ScrollController = ({
 
       // Threshold for triggering section change
       const DELTA_THRESHOLD = 250;
+      // Extra hard threshold for exiting last section
+      const EXIT_THRESHOLD = 600;
 
       // Scrolling down
-      if (accumulatedDeltaRef.current > DELTA_THRESHOLD) {
-        // If at last section, allow normal scroll
+      if (accumulatedDeltaRef.current > (currentIndex === totalSections - 1 ? EXIT_THRESHOLD : DELTA_THRESHOLD)) {
+        // If at last section and threshold met, allow normal scroll to footer
         if (currentIndex === totalSections - 1) {
+          accumulatedDeltaRef.current = 0;
           return;
         }
 
@@ -79,6 +93,10 @@ export const ScrollController = ({
       else if (Math.abs(e.deltaY) > 0 && currentIndex < totalSections - 1) {
         e.preventDefault();
       }
+      // At last section but haven't reached exit threshold
+      else if (currentIndex === totalSections - 1 && e.deltaY > 0) {
+        e.preventDefault();
+      }
     };
 
     let touchStartY = 0;
@@ -88,21 +106,28 @@ export const ScrollController = ({
 
     const handleTouchEnd = (e: TouchEvent) => {
       if (isAnimatingRef.current) return;
+      if (!isHeroInFullView()) return;
 
       const endY = e.changedTouches[0]?.clientY ?? 0;
       const delta = touchStartY - endY;
       const SWIPE_THRESHOLD = 100;
-
-      if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+      const EXIT_SWIPE_THRESHOLD = 200;
 
       // Swipe up (scroll down)
       if (delta > 0) {
-        if (currentIndex === totalSections - 1) return;
+        if (currentIndex === totalSections - 1) {
+          // Need extra strong swipe to exit to footer
+          if (Math.abs(delta) < EXIT_SWIPE_THRESHOLD) return;
+          return; // Allow scroll to footer
+        }
+        
+        if (Math.abs(delta) < SWIPE_THRESHOLD) return;
         const nextIndex = Math.min(currentIndex + 1, totalSections - 1);
         handleSectionChange(nextIndex);
       }
       // Swipe down (scroll up)
       else {
+        if (Math.abs(delta) < SWIPE_THRESHOLD) return;
         const prevIndex = Math.max(currentIndex - 1, 0);
         handleSectionChange(prevIndex);
       }
@@ -118,7 +143,7 @@ export const ScrollController = ({
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [currentIndex, totalSections, onSectionChange, prefersReducedMotion]);
+  }, [currentIndex, totalSections, onSectionChange, prefersReducedMotion, heroRef]);
 
   return null;
 };

@@ -6,8 +6,11 @@ import { detectLanguage } from "./i18n/server";
 import { Providers } from "./MainProvider";
 
 export const metadata: Metadata = {
-  title: "Exelero Yachting",
-  description: "Exelero Yachting",
+  title: {
+    default: "Exelero Yachting",
+    template: "%s | Exelero Yachting",
+  },
+  description: "Exelero Yachting — yachting, brokerage, charters, sailing gear and services.",
   icons: {
     icon: "/assets/images/favicons/favicon.ico",
   },

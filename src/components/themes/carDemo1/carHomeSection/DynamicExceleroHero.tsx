@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "reactstrap";
@@ -33,6 +33,7 @@ const DynamicExceleroHero = ({
   sections,
 }: DynamicExceleroHeroProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const heroRef = useRef<HTMLElement | null>(null);
   const currentSection = sections[currentIndex];
 
   return (
@@ -41,9 +42,11 @@ const DynamicExceleroHero = ({
         currentIndex={currentIndex}
         totalSections={sections.length}
         onSectionChange={setCurrentIndex}
+        heroRef={heroRef}
       />
       
       <section
+        ref={heroRef}
         className={`exelero-hero-section ${currentSection.overlayVariant === "darker" ? "overlay-darker" : "overlay-dark"}`}
         style={{ 
           minHeight: "100vh",

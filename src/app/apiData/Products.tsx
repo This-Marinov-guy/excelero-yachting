@@ -800,7 +800,7 @@ export const Products = [
     year: 2019,
     productState: "Most Popular",
     rating: 3.5,
-    video: "1.mp4",
+    video: "main.m4v",
     label: {
       text: "Sale",
     },
@@ -992,7 +992,7 @@ export const Products = [
     squareFeet: 2500,
     year: 2024,
     rating: 4,
-    video: "1.mp4",
+    video: "main.m4v",
     label: {
       text: "Rent",
     },
@@ -1183,7 +1183,7 @@ export const Products = [
     squareFeet: 800,
     year: 2023,
     rating: 5,
-    video: "1.mp4",
+    video: "main.m4v",
     label: {
       text: "Rent",
     },
@@ -1364,7 +1364,7 @@ export const Products = [
     squareFeet: 1600,
     year: 2022,
     rating: 4.5,
-    video: "1.mp4",
+    video: "main.m4v",
     price: 825000,
   },
   {
