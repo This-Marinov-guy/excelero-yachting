@@ -1211,24 +1211,40 @@ header {
         position: fixed;
         top: 0;
         left: 0;
-        background: rgba(var(--white), 1);
+        background: rgba(var(--black), 1);
         height: 100vh;
         width: 300px;
         z-index: 2;
         transform: translateX(-350px);
         overflow-y: auto;
         box-shadow: 10px 14px 38px 0px rgba(0, 0, 0, 0.13);
-        
-        // Ensure all text is black on mobile sidebar
-        color: rgba(var(--title-color), 1);
-        
-        a, .menu-item, .menu-link, li, h6, span, .menu-title {
-            color: rgba(var(--title-color), 1) !important;
+
+        // Black sidebar: ensure text/icons are readable
+        color: rgba(var(--white), 1);
+
+        a,
+        .menu-item,
+        .menu-link,
+        li,
+        h6,
+        span,
+        .menu-title,
+        i {
+            color: rgba(var(--white), 1) !important;
         }
-        
+
         .menu-header {
+            background: rgba(var(--black), 1);
+            color: rgba(var(--white), 1);
+
             .menu-title {
-                color: rgba(var(--title-color), 1) !important;
+                color: rgba(var(--white), 1) !important;
+            }
+
+            .close-btn {
+                i {
+                    color: rgba(var(--white), 1) !important;
+                }
             }
         }
     }
