@@ -5,7 +5,7 @@ interface ScrollControllerProps {
   currentIndex: number;
   totalSections: number;
   onSectionChange: (index: number) => void;
-  heroRef: React.RefObject<HTMLElement | null>;
+  heroRef: React.RefObject<HTMLElement>;
 }
 
 export const ScrollController = ({
@@ -101,7 +101,28 @@ export const ScrollController = ({
 
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
+      if (!isHeroInFullView()) return;
       touchStartY = e.touches[0]?.clientY ?? 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isHeroInFullView()) return;
+      
+      // Prevent default scrolling when in hero section
+      if (isAnimatingRef.current || currentIndex < totalSections - 1) {
+        e.preventDefault();
+      }
+      
+      // Also prevent at last section unless we've accumulated enough delta
+      if (currentIndex === totalSections - 1) {
+        const currentY = e.touches[0]?.clientY ?? 0;
+        const delta = touchStartY - currentY;
+        const EXIT_SWIPE_THRESHOLD = 200;
+        
+        if (Math.abs(delta) < EXIT_SWIPE_THRESHOLD) {
+          e.preventDefault();
+        }
+      }
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
@@ -117,17 +138,22 @@ export const ScrollController = ({
       if (delta > 0) {
         if (currentIndex === totalSections - 1) {
           // Need extra strong swipe to exit to footer
-          if (Math.abs(delta) < EXIT_SWIPE_THRESHOLD) return;
+          if (Math.abs(delta) < EXIT_SWIPE_THRESHOLD) {
+            e.preventDefault();
+            return;
+          }
           return; // Allow scroll to footer
         }
         
         if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+        e.preventDefault();
         const nextIndex = Math.min(currentIndex + 1, totalSections - 1);
         handleSectionChange(nextIndex);
       }
       // Swipe down (scroll up)
       else {
         if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+        e.preventDefault();
         const prevIndex = Math.max(currentIndex - 1, 0);
         handleSectionChange(prevIndex);
       }
@@ -136,12 +162,14 @@ export const ScrollController = ({
     // Event listeners
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener("wheel", handleWheel as any);
       window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchmove", handleTouchMove as any);
+      window.removeEventListener("touchend", handleTouchEnd as any);
     };
   }, [currentIndex, totalSections, onSectionChange, prefersReducedMotion, heroRef]);
 
