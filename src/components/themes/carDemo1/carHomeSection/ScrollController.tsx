@@ -5,7 +5,7 @@ interface ScrollControllerProps {
   currentIndex: number;
   totalSections: number;
   onSectionChange: (index: number) => void;
-  heroRef: React.RefObject<HTMLElement>;
+  heroRef: React.RefObject<HTMLElement | null>;
 }
 
 export const ScrollController = ({
