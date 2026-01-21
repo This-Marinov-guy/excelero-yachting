@@ -109,24 +109,20 @@ const DynamicExceleroHero = ({
                   <Link
                     key={`${panel.name}-${idx}`}
                     href={panel.href}
-                    className={`geo-panel ${variantClass}`}
+                    className="geo-panel geo-panel--glass"
                     data-aos="fade-up"
                     data-aos-duration={500 + idx * 150}
                   >
-                    <div className="geo-thumb" aria-hidden="true">
+                    <div className={`geo-thumb ${variantClass}`}>
                       <Image 
                         src={panel.thumbImage} 
                         alt={panel.name} 
                         fill 
                         className="geo-thumb-img" 
-                        style={{ objectFit: "cover" }} 
+                        style={{ objectFit: "cover" }}
                       />
                     </div>
-
-                    <div className="geo-content">
-                      <h3 className="geo-title">{panel.name}</h3>
-                      <p className="geo-text">{panel.description}</p>
-                    </div>
+                    <h3 className="geo-title">{panel.name}</h3>
                   </Link>
                 );
               })}
