@@ -11,7 +11,7 @@ const AboutPage = () => {
 
       <section className='section-b-space exelero-about-section'>
         <Container>
-          <Row className='align-items-center g-4 g-lg-5'>
+          <Row className='align-items-center g-4 g-lg-5 mt-3'>
             <Col lg={6}>
               <div className='about-hero-image'>
                 <Image
@@ -84,19 +84,24 @@ const AboutPage = () => {
             </div>
 
             <Row className='g-3 g-md-4 justify-content-center'>
-              <Col md={4} sm={6} xs={6} className='partner-col'>
+              <Col md={3} sm={6} xs={6} className='partner-col'>
                 <Link className='partner-card' href={RouteList.Pages.Partners.XYachts}>
                   <Image src='/assets/images/logo/x-yachts.png' alt='X-Yachts' width={220} height={120} className='partner-logo' />
                 </Link>
               </Col>
-              <Col md={4} sm={6} xs={6} className='partner-col'>
+              <Col md={3} sm={6} xs={6} className='partner-col'>
                 <Link className='partner-card' href={RouteList.Pages.Partners.Elvstrom}>
                   <Image src='/assets/images/logo/elvstrom.jpg' alt='Elvstrom' width={220} height={120} className='partner-logo' />
                 </Link>
               </Col>
-              <Col md={4} sm={6} xs={6} className='partner-col'>
+              <Col md={3} sm={6} xs={6} className='partner-col'>
                 <Link className='partner-card' href={RouteList.Pages.Partners.OmayaYachts}>
                   <Image src='/assets/images/logo/omaya-yachts.jpg' alt='Omaya Yachts' width={220} height={120} className='partner-logo' />
+                </Link>
+              </Col>
+              <Col md={3} sm={6} xs={6} className='partner-col'>
+                <Link className='partner-card' href={RouteList.Pages.Partners.Zhik}>
+                  <Image src='/assets/images/logo/zhik.jpg' alt='Zhik' width={220} height={120} className='partner-logo' />
                 </Link>
               </Col>
             </Row>
