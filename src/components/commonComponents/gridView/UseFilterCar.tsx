@@ -49,7 +49,8 @@ const UseFilterCar = ({ value }: FilterProductsType) => {
   useEffect(() => {
     setShowProduct(filteredProducts);
 
-    const newSearchParams = new URLSearchParams(searchParams);
+    const baseParams = searchParams ? searchParams.toString() : "";
+    const newSearchParams = new URLSearchParams(baseParams);
     ["brandmodel", "budget", "categories", "fueltype", "modelYear", "seats", "colors", "kilometers", "transmissions", "owner"].forEach((key) => newSearchParams.delete(key));
 
     if (carBrandModel.length) newSearchParams.set("brandmodel", carBrandModel.join(","));
@@ -63,7 +64,7 @@ const UseFilterCar = ({ value }: FilterProductsType) => {
     if (carTransmissions.length) newSearchParams.set("transmissions", carTransmissions.join(","));
     if (ownerDetail.length) newSearchParams.set("owner", ownerDetail.join(","));
 
-    if (newSearchParams.toString() !== searchParams.toString()) {
+    if (newSearchParams.toString() !== baseParams) {
       router.push(`${pathname}?${newSearchParams}`);
     }
   }, [filteredProducts, pathname, router, searchParams, carBrandModel, budgetStatus, categories, fuelType, modelYear, seats, color, kmsDriven, carTransmissions, ownerDetail]);

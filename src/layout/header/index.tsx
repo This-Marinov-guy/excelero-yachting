@@ -19,6 +19,7 @@ const Header: React.FC<PathTypes> = ({ part }) => {
   const isTopBar = ["car-2", "property-2"].some((item) => part?.includes(item));
   const isJobOrProperty = ["job-2", "job-3", "property-2"].some((item) => part?.includes(item));
   const isSticky = UseStickyBar(100);
+  const isHome = !part; // root hero page
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Header: React.FC<PathTypes> = ({ part }) => {
   }, []);
 
   return (
-    <header className={`px-0${HeaderClassMap[part] || ""} ${isSticky && !isMobile ? "sticky-header" : ""}`} id='header'>
+    <header className={`px-0${HeaderClassMap[part] || ""} ${isSticky && !isMobile && !isHome ? "sticky-header" : ""}`} id='header'>
       {isTopBar && <TapTop part={part} />}
       <Container className={ContainerClassMap[part] || ""}>
         <div className='header-flex'>

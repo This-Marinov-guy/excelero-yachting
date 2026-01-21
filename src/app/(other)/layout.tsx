@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const pathname = usePathname();
+    const pathname = usePathname() || "";
     const segments = pathname.split("/").slice(1);
     const symbolRegex = /[!@#\$%\^\*\(\)_\+\{\}\[\]:;"'<>,.?/\\|`~=]/g;
     const [firstPart] = segments.map((item) => item.replace(symbolRegex, " "));

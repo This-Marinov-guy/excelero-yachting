@@ -6,7 +6,7 @@ import { PathTypes } from "@/types/Layout";
 import { usePathname } from "next/navigation";
 
 const Loading: React.FC<PathTypes> = () => {
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   const symbolRegex = /[!@#\$%\^\*\(\)_\+\{\}\[\]:;"'<>,.?/\\|`~=]/g;
   const [firstPartRaw] = pathname.split("/").slice(1);
   const firstPart = firstPartRaw.replace(symbolRegex, "").toLowerCase();

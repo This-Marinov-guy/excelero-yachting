@@ -42,7 +42,8 @@ const UseFilterJob = ({ value }: FilterProductsType) => {
   }, [value, jobAllCategory, salaryStatus, JobWorkMode, JobCompanyType, JobEducation, JobCheck, JobLocation, JobTopCompanies, JobType, sortBy]);
 
   useEffect(() => {
-    const newSearchParams = new URLSearchParams(searchParams);
+    const baseParams = searchParams ? searchParams.toString() : "";
+    const newSearchParams = new URLSearchParams(baseParams);
 
     ["allCategory", "salary", "jobWorkMode", "companyType", "education", "byCheck", "location", "topCompany", "jobType"].forEach((name) => newSearchParams.delete(name));
 
@@ -56,7 +57,7 @@ const UseFilterJob = ({ value }: FilterProductsType) => {
     if (JobTopCompanies.length) newSearchParams.set("topCompany", JobTopCompanies.join(","));
     if (JobType.length) newSearchParams.set("jobType", JobType.join(","));
 
-    if (newSearchParams.toString() !== searchParams.toString()) {
+    if (newSearchParams.toString() !== baseParams) {
       router.push(`${pathname}?${newSearchParams}`);
     }
   }, [pathname, router, searchParams, jobAllCategory, salaryStatus, JobWorkMode, JobCompanyType, JobEducation, JobCheck, JobLocation, JobTopCompanies, JobType]);
