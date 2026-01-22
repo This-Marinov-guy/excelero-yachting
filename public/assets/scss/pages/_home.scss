@@ -2473,7 +2473,7 @@ main {
 
       @media (max-width: 767px) {
         padding-bottom: calc(50px + (70 - 50) * ((100vw - 320px) / (767 - 320))); // Space above scroll-to-top
-        margin-bottom: 0;
+        margin-bottom: 40px;
         margin-left: 0;
         margin-right: 0;
         display: flex;
