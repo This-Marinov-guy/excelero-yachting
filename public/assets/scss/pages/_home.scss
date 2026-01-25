@@ -2464,12 +2464,29 @@ main {
         margin-right: auto;
       }
 
+      @media (min-width: 992px) {
+        position: absolute;
+        right: calc(0.5% + (1.5 - 0.5) * ((100vw - 992px) / (1920 - 992)));
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: calc(20px + (30 - 20) * ((100vw - 992px) / (1920 - 992)));
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+        z-index: 10;
+      }
+
       margin-top: calc(180px + (40 - 18) * ((100vw - 320px) / (1920 - 320)));
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: calc(20px + (40 - 20) * ((100vw - 320px) / (1920 - 320)));
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       align-items: center;
-      justify-items: center;
+      gap: calc(20px + (40 - 20) * ((100vw - 320px) / (1920 - 320)));
+      margin-left: auto;
+      margin-right: calc(5% + (10 - 5) * ((100vw - 768px) / (1920 - 768)));
 
       @media (max-width: 767px) {
         padding-bottom: calc(50px + (70 - 50) * ((100vw - 320px) / (767 - 320))); // Space above scroll-to-top
@@ -2490,8 +2507,7 @@ main {
       }
 
       @media (max-width: 991px) {
-        grid-template-columns: 1fr;
-        max-width: 520px;
+        justify-content: center;
         margin-left: auto;
         margin-right: auto;
       }

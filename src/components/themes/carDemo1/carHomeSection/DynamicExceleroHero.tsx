@@ -99,7 +99,6 @@ const DynamicExceleroHero = ({
 
             <div 
               className={`geo-panels ${currentSection.panels.length === 1 ? "geo-panels--single" : ""}`}
-              style={{ display: "flex", justifyContent: "center" }}
               key={`panels-${currentIndex}`}
             >
               {currentSection.panels.map((panel, idx) => {
