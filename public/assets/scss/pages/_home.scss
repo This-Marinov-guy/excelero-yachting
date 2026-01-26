@@ -2429,6 +2429,7 @@ main {
       color: #fff;
       font-size: calc(28px + (48 - 28) * ((100vw - 320px) / (1920 - 320)));
       font-weight: 700;
+      font-family: $michroma;
       text-align: center;
       margin-bottom: calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320)));
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
@@ -2444,6 +2445,7 @@ main {
       color: #fff;
       font-size: calc(18px + (28 - 18) * ((100vw - 320px) / (1920 - 320)));
       font-weight: 400;
+      font-family: $michroma;
       text-align: center;
       margin-bottom: calc(30px + (60 - 30) * ((100vw - 320px) / (1920 - 320)));
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
@@ -2780,6 +2782,7 @@ main {
         color: rgba(var(--white), 1);
         font-size: calc(28px + (46 - 28) * ((100vw - 320px) / (1920 - 320)));
         font-weight: 800;
+        font-family: $michroma;
         text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.55);
         margin: 0;
       }

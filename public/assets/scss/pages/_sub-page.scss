@@ -2334,6 +2334,36 @@
         }
       }
 
+      // Upload boat section styles
+      .upload-boat-section {
+        .dropzone-container {
+          &.drag-active {
+            border-color: rgba(var(--theme-color), 1) !important;
+            background-color: rgba(var(--theme-color), 0.05) !important;
+          }
+
+          &.disabled {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+          }
+        }
+
+        // Image preview grid with drag and drop
+        .row.g-3 {
+          [draggable="true"] {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+
+            &:hover {
+              transform: translateY(-2px);
+            }
+
+            &:active {
+              cursor: grabbing;
+            }
+          }
+        }
+      }
+
       .dealer-cards-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

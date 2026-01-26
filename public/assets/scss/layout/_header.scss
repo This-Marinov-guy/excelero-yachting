@@ -985,7 +985,7 @@ header {
         }
 
         .header-toggle__brand-text {
-            font-family: "Orbitron", sans-serif;
+            font-family: $michroma;
             font-size: calc(14px + (18 - 14) * ((100vw - 320px) / (991 - 320)));
             font-weight: 600;
             color: #fff;

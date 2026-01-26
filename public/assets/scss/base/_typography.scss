@@ -18,6 +18,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Michroma";
+    src: url("/assets/fonts/Michroma-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     position: relative;
     font-size: 18px;
@@ -84,7 +92,7 @@ p {
 h1 {
     font-size: calc(22px + (60 - 22) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 700;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: 1.2;
     margin-bottom: 0;
 }
@@ -92,7 +100,7 @@ h1 {
 h2 {
     font-size: calc(20px + (38 - 20) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 500;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: normal;
     margin-bottom: 0;
 }
@@ -100,7 +108,7 @@ h2 {
 h3 {
     font-size: calc(20px + (28 - 20) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 500;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: normal;
     margin-bottom: 0;
 }
@@ -108,7 +116,7 @@ h3 {
 h4 {
     font-size: calc(16px + (22 - 16) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 400;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: normal;
     margin-bottom: 0;
 }
@@ -116,7 +124,7 @@ h4 {
 h5 {
     font-size: calc(18px + (20 - 18) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 500;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: normal;
     margin-bottom: 0;
 }
@@ -124,7 +132,7 @@ h5 {
 h6 {
     font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 400;
-    font-family: $orbitron;
+    font-family: $michroma;
     line-height: normal;
     margin-bottom: 0;
 }
