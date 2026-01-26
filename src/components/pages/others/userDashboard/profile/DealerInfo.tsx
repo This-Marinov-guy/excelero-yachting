@@ -103,26 +103,12 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
         if (error) throw error;
         toast.success("Dealer information updated successfully");
       } else {
-        // Create new - we need a boat_id, but since this is dealer info, we might need to create a placeholder boat
-        // For now, let's require boat_id to be provided or create a minimal boat entry
-        // Actually, looking at the schema, broker_data requires boat_id, so we need to handle this
-        // Let's create a temporary boat entry or make boat_id nullable for dealer-only entries
-        // For now, I'll create a minimal boat entry
-
-        // First create a boat
-        const { data: boatData, error: boatError } = await supabase
-          .from("boats")
-          .insert({})
-          .select()
-          .single();
-
-        if (boatError) throw boatError;
-
-        // Then create broker_data
+        // Create new broker_data WITHOUT boat_id (broker exists independently)
+        // boat_id will be set later when a boat is submitted
         const { error } = await supabase
           .from("broker_data")
           .insert({
-            boat_id: boatData.id,
+            boat_id: null, // Will be set when boat is created
             user_id: session.user.id,
             name: formData.name,
             email: formData.email,

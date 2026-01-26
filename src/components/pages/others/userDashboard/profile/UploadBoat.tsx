@@ -137,10 +137,14 @@ const UploadBoat = () => {
                 return;
             }
 
-            const { data, error } = await supabase
-                .from("broker_data")
-                .select("id, name, email, phone, dealer, boat_id")
-                .eq("user_id", session.user.id);
+      // Fetch broker_data entries that don't have a boat yet (boat_id is null)
+      // These are available dealers that can be linked to a new boat
+      const { data, error } = await supabase
+        .from("broker_data")
+        .select("id, name, email, phone, dealer, boat_id")
+        .eq("user_id", session.user.id)
+        .is("boat_id", null) // Only show dealers without boats
+        .order("created_at", { ascending: false });
 
             if (error) {
                 console.error("Error fetching broker data:", error);
@@ -521,20 +525,17 @@ const UploadBoat = () => {
 
             if (boatDataError) throw boatDataError;
 
-            // Step 3: Create broker_data entry linking the selected dealer to the boat
+            // Step 3: Update existing broker_data entry to link it to the boat
             const selectedDealer = brokerDataList.find(d => d.id === formData.dealer_id);
             if (!selectedDealer) throw new Error("Selected dealer not found");
 
+            // Update the existing broker_data entry with the boat_id
             const { error: brokerDataError } = await supabase
                 .from("broker_data")
-                .insert({
+                .update({
                     boat_id: boatData.id,
-                    user_id: (await supabase.auth.getSession()).data.session?.user?.id,
-                    name: selectedDealer.name,
-                    email: selectedDealer.email,
-                    phone: selectedDealer.phone,
-                    dealer: selectedDealer.dealer,
-                });
+                })
+                .eq("id", selectedDealer.id);
 
             if (brokerDataError) throw brokerDataError;
 
