@@ -108,7 +108,7 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
         // Actually, looking at the schema, broker_data requires boat_id, so we need to handle this
         // Let's create a temporary boat entry or make boat_id nullable for dealer-only entries
         // For now, I'll create a minimal boat entry
-        
+
         // First create a boat
         const { data: boatData, error: boatError } = await supabase
           .from("boats")
@@ -139,7 +139,7 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
       setShowForm(false);
       await fetchBrokerData();
       onDataChange?.();
-      
+
       // Dispatch custom event to notify sidebar to refresh lock status
       window.dispatchEvent(new CustomEvent("dealerDataChanged"));
     } catch (err: any) {
@@ -191,7 +191,7 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
       onDataChange?.();
       setDeleteModalOpen(false);
       setItemToDelete(null);
-      
+
       // Dispatch custom event to notify sidebar to refresh lock status
       window.dispatchEvent(new CustomEvent("dealerDataChanged"));
     } catch (err: any) {
@@ -299,26 +299,28 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
                     {item.dealer && <p className="mb-0 text-muted">{item.dealer}</p>}
                   </div>
                   <div className="d-flex gap-2">
-                    <Button
-                      className="btn-icon"
+                    <button
+                      type="button"
+                      className="btn-icon-only"
                       onClick={() => handleEdit(item)}
                       aria-label="Edit"
                     >
                       <i className="ri-edit-line" />
-                    </Button>
-                    <Button
-                      className="btn-icon danger"
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-icon-only btn-icon-danger"
                       onClick={() => handleDeleteClick(item)}
                       aria-label="Delete"
                     >
                       <i className="ri-delete-bin-line" />
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </CardBody>
-          </Card>
-        ))}
-        
+            </Card>
+          ))}
+
         </div>
       ) : null}
 
@@ -337,15 +339,15 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
                   Are you sure you want to delete <strong>{itemToDelete?.name}</strong>? This action cannot be undone.
                 </p>
                 <div className='d-flex align-items-center justify-content-center gap-2'>
-                  <Button 
-                    className='btn-border' 
+                  <Button
+                    className='btn-border'
                     onClick={handleDeleteCancel}
                     disabled={deleting}
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    className='btn-solid danger' 
+                  <Button
+                    className='btn-solid danger'
                     onClick={handleDeleteConfirm}
                     disabled={deleting}
                   >

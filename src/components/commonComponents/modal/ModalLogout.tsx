@@ -44,9 +44,9 @@ const ModalLogout = () => {
         <div className='modal-content'>
           <ModalHeader toggle={toggle} close={<CloseBtn toggle={toggle} />} />
           <ModalBody>
-            <div className='logout-img'>
+            {/* <div className='logout-img'>
               <img src={`${SVGPath}/other/logout.svg`} alt='logout' className='img-fluid d-block mx-auto' />
-            </div>
+            </div> */}
             <div className='logout-content'>
               <h4 className='text-center'>{LogoutTitle}</h4>
               <p className='text-center'>{LogoutContent}</p>

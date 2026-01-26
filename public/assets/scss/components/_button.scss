@@ -37,6 +37,17 @@
         background: rgba(var(--theme-color), 1);
         color: #fff;
     }
+
+    &.danger {
+        color: rgba(220, 53, 69, 1);
+        border-color: rgba(220, 53, 69, 1);
+
+        &:hover {
+            border-color: transparent;
+            background: rgba(220, 53, 69, 1);
+            color: #fff;
+        }
+    }
 }
 
 .text-btn {
