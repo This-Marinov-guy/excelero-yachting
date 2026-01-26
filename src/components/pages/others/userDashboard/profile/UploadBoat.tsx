@@ -4,6 +4,13 @@ import { getSupabaseBrowserClient } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { Button, Card, CardBody, CardTitle } from "reactstrap";
 import CommonInput from "@/components/commonComponents/CommonInput";
+import dynamic from "next/dynamic";
+
+// Dynamically import RichTextEditor to avoid SSR issues
+const RichTextEditor = dynamic(
+  () => import("@/components/commonComponents/RichTextEditor"),
+  { ssr: false }
+);
 import Image from "next/image";
 import Dropzone from "react-dropzone";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -139,6 +146,23 @@ const UploadBoat = () => {
 
       // Fetch broker_data entries that don't have a boat yet (boat_id is null)
       // These are available dealers that can be linked to a new boat
+      // First, check if user has any broker_data (for lock status)
+      const { data: allBrokers, error: allBrokersError } = await supabase
+        .from("broker_data")
+        .select("id")
+        .eq("user_id", session.user.id);
+
+      if (allBrokersError) {
+        console.error("Error fetching broker data:", allBrokersError);
+        setIsLocked(true);
+        setLoading(false);
+        return;
+      }
+
+      // Check lock status based on whether user has any broker_data
+      setIsLocked(!allBrokers || allBrokers.length === 0);
+
+      // Fetch only broker_data entries without boats (available for linking to new boats)
       const { data, error } = await supabase
         .from("broker_data")
         .select("id, name, email, phone, dealer, boat_id")
@@ -146,16 +170,12 @@ const UploadBoat = () => {
         .is("boat_id", null) // Only show dealers without boats
         .order("created_at", { ascending: false });
 
-            if (error) {
-                console.error("Error fetching broker data:", error);
-                setIsLocked(true);
-                setLoading(false);
-                return;
-            }
+      if (error) {
+        console.error("Error fetching available broker data:", error);
+      }
 
-            setIsLocked(!data || data.length === 0);
-            setBrokerDataList(data || []);
-            setLoading(false);
+      setBrokerDataList(data || []);
+      setLoading(false);
         };
 
         checkDealerInfo();
@@ -517,6 +537,7 @@ const UploadBoat = () => {
                 water_tank: formData.water_tank ? parseInt(formData.water_tank) : null,
                 brochure: brochureUrl || null, // Use already uploaded brochure URL
                 exterior_description: formData.exterior_description.trim() || null,
+                additional_details: formData.additional_details.trim() || null,
             };
 
             const { error: boatDataError } = await supabase
@@ -630,9 +651,9 @@ const UploadBoat = () => {
 
                         {/* Basic Information */}
                         <div className="mb-3">
+                            <label className="form-label">Title *</label>
                             <CommonInput
                                 inputType="text"
-                                placeholder="Title *"
                                 value={formData.title}
                                 onChange={(e) => handleFieldChange("title", e.target.value)}
                                 required
@@ -641,17 +662,17 @@ const UploadBoat = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Manufacturer</label>
                                 <CommonInput
                                     inputType="text"
-                                    placeholder="Manufacturer"
                                     value={formData.manufacturer}
                                     onChange={(e) => handleFieldChange("manufacturer", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Build Number</label>
                                 <CommonInput
                                     inputType="text"
-                                    placeholder="Build Number"
                                     value={formData.build_number}
                                     onChange={(e) => handleFieldChange("build_number", e.target.value)}
                                 />
@@ -660,17 +681,17 @@ const UploadBoat = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Build Year</label>
                                 <CommonInput
                                     inputType="text"
-                                    placeholder="Build Year"
                                     value={formData.build_year}
                                     onChange={(e) => handleFieldChange("build_year", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Location</label>
                                 <CommonInput
                                     inputType="text"
-                                    placeholder="Location"
                                     value={formData.location}
                                     onChange={(e) => handleFieldChange("location", e.target.value)}
                                 />
@@ -679,9 +700,9 @@ const UploadBoat = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Price</label>
                                 <CommonInput
                                     inputType="number"
-                                    placeholder="Price"
                                     value={formData.price}
                                     onChange={(e) => handleFieldChange("price", e.target.value)}
                                 />
@@ -703,9 +724,9 @@ const UploadBoat = () => {
                         </div>
 
                         <div className="mb-3">
+                            <label className="form-label">Dealer</label>
                             <CommonInput
                                 inputType="text"
-                                placeholder="Dealer"
                                 value={formData.dealer}
                                 onChange={(e) => handleFieldChange("dealer", e.target.value)}
                             />
@@ -713,19 +734,17 @@ const UploadBoat = () => {
 
                         <div className="mb-3">
                             <label className="form-label">Description</label>
-                            <textarea
-                                className="form-control"
-                                rows={4}
-                                placeholder="Description"
+                            <RichTextEditor
                                 value={formData.description}
-                                onChange={(e) => handleFieldChange("description", e.target.value)}
+                                onChange={(value) => handleFieldChange("description", value)}
+                                rows={4}
                             />
                         </div>
 
                         <div className="mb-3">
+                            <label className="form-label">Designer</label>
                             <CommonInput
                                 inputType="text"
-                                placeholder="Designer"
                                 value={formData.designer}
                                 onChange={(e) => handleFieldChange("designer", e.target.value)}
                             />
@@ -740,7 +759,6 @@ const UploadBoat = () => {
                                     type="number"
                                     step="0.01"
                                     className="form-control"
-                                    placeholder="Hull Length (m)"
                                     value={formData.hull_length}
                                     onChange={(e) => handleFieldChange("hull_length", e.target.value)}
                                 />
@@ -751,7 +769,6 @@ const UploadBoat = () => {
                                     type="number"
                                     step="0.01"
                                     className="form-control"
-                                    placeholder="Waterline Length (m)"
                                     value={formData.waterline_length}
                                     onChange={(e) => handleFieldChange("waterline_length", e.target.value)}
                                 />
@@ -765,7 +782,6 @@ const UploadBoat = () => {
                                     type="number"
                                     step="0.01"
                                     className="form-control"
-                                    placeholder="Beam (m)"
                                     value={formData.beam}
                                     onChange={(e) => handleFieldChange("beam", e.target.value)}
                                 />
@@ -776,7 +792,6 @@ const UploadBoat = () => {
                                     type="number"
                                     step="0.01"
                                     className="form-control"
-                                    placeholder="Draft (m)"
                                     value={formData.draft}
                                     onChange={(e) => handleFieldChange("draft", e.target.value)}
                                 />
@@ -785,17 +800,17 @@ const UploadBoat = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Ballast (kg)</label>
                                 <CommonInput
                                     inputType="number"
-                                    placeholder="Ballast (kg)"
                                     value={formData.ballast}
                                     onChange={(e) => handleFieldChange("ballast", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Displacement (kg)</label>
                                 <CommonInput
                                     inputType="number"
-                                    placeholder="Displacement (kg)"
                                     value={formData.displacement}
                                     onChange={(e) => handleFieldChange("displacement", e.target.value)}
                                 />
@@ -811,28 +826,29 @@ const UploadBoat = () => {
                                     type="number"
                                     step="0.01"
                                     className="form-control"
-                                    placeholder="Engine Power (hp)"
                                     value={formData.engine_power}
                                     onChange={(e) => handleFieldChange("engine_power", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
+                                <label className="form-label">Fuel Tank (L)</label>
                                 <CommonInput
                                     inputType="number"
-                                    placeholder="Fuel Tank (L)"
                                     value={formData.fuel_tank}
                                     onChange={(e) => handleFieldChange("fuel_tank", e.target.value)}
                                 />
                             </div>
                         </div>
 
-                        <div className="mb-3">
-                            <CommonInput
-                                inputType="number"
-                                placeholder="Water Tank (L)"
-                                value={formData.water_tank}
-                                onChange={(e) => handleFieldChange("water_tank", e.target.value)}
-                            />
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Water Tank (L)</label>
+                                <CommonInput
+                                    inputType="number"
+                                    value={formData.water_tank}
+                                    onChange={(e) => handleFieldChange("water_tank", e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         {/* Additional Information */}
@@ -1047,13 +1063,23 @@ const UploadBoat = () => {
 
                         <div className="mb-3">
                             <label className="form-label">Exterior Description</label>
-                            <textarea
-                                className="form-control"
-                                rows={4}
-                                placeholder="Exterior Description"
+                            <RichTextEditor
                                 value={formData.exterior_description}
-                                onChange={(e) => handleFieldChange("exterior_description", e.target.value)}
+                                onChange={(value) => handleFieldChange("exterior_description", value)}
+                                rows={4}
                             />
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="form-label">Additional Details</label>
+                            <RichTextEditor
+                                value={formData.additional_details}
+                                onChange={(value) => handleFieldChange("additional_details", value)}
+                                rows={6}
+                            />
+                            <small className="text-muted mt-2 d-block">
+                                Use the toolbar above to format your text with styles, lists, links, and more.
+                            </small>
                         </div>
 
                         <div className="d-flex gap-2 mt-4">

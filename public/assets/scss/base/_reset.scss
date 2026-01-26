@@ -4,13 +4,16 @@
 
 /* Hide scrollbar visuals only on the main (home) page (still scrollable) */
 body.home-scrollbar-hidden {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge legacy */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge legacy */
 
     &::-webkit-scrollbar {
         width: 0;
         height: 0;
-        display: none; /* Chrome/Safari */
+        display: none;
+        /* Chrome/Safari */
     }
 
     /* Hide scrollbars for nested scroll containers (e.g. horizontal panel scroller) */
@@ -194,6 +197,7 @@ input[type="number"] {
     background-repeat: no-repeat !important;
     display: block !important;
 }
+
 .form-check-input[type=checkbox] {
     margin-top: 0;
 }
@@ -210,7 +214,8 @@ input[type="number"] {
 
 .style-module_starRatingWrap__q-lJC {
     line-height: 1;
-    svg{
+
+    svg {
         vertical-align: baseline;
     }
 }
@@ -220,17 +225,19 @@ input[type="number"] {
 }
 
 #_rht_toaster {
-    >div{
-        >div{
+    >div {
+        >div {
             font-weight: 400 !important;
         }
     }
-    
+
 }
-.save-btn{
-    &.btn-secondary{
+
+.save-btn {
+    &.btn-secondary {
         border: none;
-        &:focus-visible{
+
+        &:focus-visible {
             box-shadow: none;
         }
     }

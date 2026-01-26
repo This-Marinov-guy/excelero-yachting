@@ -2331,6 +2331,23 @@
           .form-input {
             margin-bottom: 0;
           }
+
+          // Reduce spacing between labels and inputs
+          .form-label {
+            margin-bottom: 4px;
+            display: block;
+          }
+
+          // Ensure inputs are close to their labels
+          .mb-3 {
+            .form-label + *,
+            .form-label + .form-control,
+            .form-label + input,
+            .form-label + select,
+            .form-label + textarea {
+              margin-top: 4px;
+            }
+          }
         }
       }
 

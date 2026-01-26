@@ -20,7 +20,7 @@ const CommonInput: FC<InputBoxType> = ({
   return (
     <div className={ColClass}>
       <div className={`${mainClass ? mainClass : ""}form-input`}>
-        <label>{label}</label>
+        {label &&<label>{label}</label>}
         <div className={`select-button arrow-none`}>
           <input
             id={id}

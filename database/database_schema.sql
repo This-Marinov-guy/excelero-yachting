@@ -33,14 +33,16 @@ CREATE TABLE IF NOT EXISTS boat_data (
     water_tank INTEGER,
     brochure VARCHAR(500),
     exterior_description TEXT,
+    additional_details TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Broker data table (one-to-many relationship with boats, one-to-many relationship with auth.users)
+-- Note: boat_id is nullable to allow dealers to exist independently before being linked to a boat
 CREATE TABLE IF NOT EXISTS broker_data (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    boat_id UUID NOT NULL REFERENCES boats(id) ON DELETE CASCADE,
+    boat_id UUID REFERENCES boats(id) ON DELETE CASCADE, -- Nullable: allows dealers to exist without boats
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     name VARCHAR(512) NOT NULL,
     email VARCHAR(512) NOT NULL,

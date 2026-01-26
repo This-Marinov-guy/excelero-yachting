@@ -70,6 +70,7 @@ export interface BoatUploadState {
     fuel_tank: string;
     water_tank: string;
     exterior_description: string;
+    additional_details: string;
   };
   imageMetadata: ImageMetadata[];
   uploadedImages: UploadedImage[]; // Images already uploaded to storage
@@ -104,6 +105,7 @@ const initialState: BoatUploadState = storedData || {
     fuel_tank: "",
     water_tank: "",
     exterior_description: "",
+    additional_details: "",
   },
   imageMetadata: [],
   uploadedImages: [],

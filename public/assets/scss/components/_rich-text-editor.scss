@@ -1,0 +1,217 @@
+// Rich Text Editor (Tiptap) Styles
+.rich-text-editor-wrapper {
+    border: 1px solid rgba(var(--border-color), 1);
+    border-radius: 4px;
+    background-color: rgba(var(--bg-color), 1);
+    position: relative;
+    resize: vertical;
+    overflow: auto;
+    min-height: 200px;
+
+    .rich-text-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px;
+        background-color: rgba(var(--bg-color), 1);
+        border-bottom: 1px solid rgba(var(--border-color), 1);
+        flex-wrap: wrap;
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(var(--border-color), 1);
+            background-color: rgba(var(--bg-color), 1);
+            color: rgba(var(--title-color), 1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+
+            &:hover {
+                background-color: rgba(var(--theme-color), 0.1);
+                border-color: rgba(var(--theme-color), 1);
+            }
+
+            &.is-active {
+                background-color: rgba(var(--theme-color), 1);
+                color: #fff;
+                border-color: rgba(var(--theme-color), 1);
+            }
+
+            i {
+                font-size: 16px;
+            }
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background-color: rgba(var(--border-color), 1);
+            margin: 0 4px;
+        }
+
+        .color-picker {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(var(--border-color), 1);
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 2px;
+            background: transparent;
+
+            &::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+
+            &::-webkit-color-swatch {
+                border: none;
+                border-radius: 2px;
+            }
+        }
+    }
+
+    .rich-text-editor-content {
+        padding: 12px;
+        min-height: 100px;
+        font-family: inherit;
+        font-size: 14px;
+        color: rgba(var(--title-color), 1);
+        outline: none;
+        line-height: 1.6;
+
+        p {
+            margin: 0 0 8px 0;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        h1, h2, h3 {
+            margin: 16px 0 8px 0;
+            font-weight: 600;
+            line-height: 1.3;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            margin: 8px 0;
+            padding-left: 24px;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+
+        a.rich-text-link {
+            color: rgba(var(--theme-color), 1);
+            text-decoration: underline;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        u {
+            text-decoration: underline;
+        }
+
+        s {
+            text-decoration: line-through;
+        }
+
+        &[data-placeholder]:empty::before {
+            content: attr(data-placeholder);
+            color: rgba(var(--body-color), 0.6);
+            pointer-events: none;
+            position: absolute;
+        }
+    }
+
+    .ProseMirror {
+        outline: none;
+        min-height: 100px;
+    }
+
+    // Add resize handle indicator at the bottom
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(var(--border-color), 0.3) 20%,
+            rgba(var(--border-color), 0.3) 80%,
+            transparent 100%
+        );
+        cursor: ns-resize;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    &:hover::after {
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(var(--theme-color), 0.5) 20%,
+            rgba(var(--theme-color), 0.5) 80%,
+            transparent 100%
+        );
+    }
+
+    // Show resize cursor on hover at bottom
+    &:hover {
+        cursor: default;
+    }
+
+    // Resize handle area
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        cursor: ns-resize;
+        z-index: 5;
+    }
+
+    .ProseMirror p.is-editor-empty:first-child::before {
+        content: attr(data-placeholder);
+        float: left;
+        color: rgba(var(--body-color), 0.6);
+        pointer-events: none;
+        height: 0;
+    }
+}
