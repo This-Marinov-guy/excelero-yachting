@@ -57,7 +57,6 @@ export interface BoatUploadState {
     location: string;
     price: string;
     vat_included: boolean;
-    dealer: string;
     description: string;
     designer: string;
     hull_length: string;
@@ -92,7 +91,6 @@ const initialState: BoatUploadState = storedData || {
     location: "",
     price: "",
     vat_included: true,
-    dealer: "",
     description: "",
     designer: "",
     hull_length: "",

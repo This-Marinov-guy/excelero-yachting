@@ -4,6 +4,8 @@
 -- Main boats table
 CREATE TABLE IF NOT EXISTS boats (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    active BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -13,27 +15,26 @@ CREATE TABLE IF NOT EXISTS boat_data (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     boat_id UUID UNIQUE NOT NULL REFERENCES boats(id) ON DELETE CASCADE,
     title VARCHAR(512) NOT NULL,
-    manufacturer VARCHAR(512),
-    build_number VARCHAR(100),
-    build_year VARCHAR(4),
-    location VARCHAR(512),
-    price INTEGER,
-    vat_included BOOLEAN DEFAULT TRUE,
-    dealer VARCHAR(512),
-    description TEXT,
-    designer VARCHAR(512),
-    hull_length DOUBLE PRECISION,
-    waterline_length DOUBLE PRECISION,
-    beam DOUBLE PRECISION,
-    draft DOUBLE PRECISION,
-    ballast INTEGER,
-    displacement INTEGER,
-    engine_power DOUBLE PRECISION,
-    fuel_tank INTEGER,
-    water_tank INTEGER,
-    brochure VARCHAR(500),
-    exterior_description TEXT,
-    additional_details TEXT,
+    manufacturer VARCHAR(512) NOT NULL,
+    build_number VARCHAR(100) NOT NULL,
+    build_year VARCHAR(4) NOT NULL,
+    location VARCHAR(512) NOT NULL,
+    price INTEGER NOT NULL,
+    vat_included BOOLEAN NOT NULL DEFAULT TRUE,
+    description TEXT NOT NULL,
+    designer VARCHAR(512) NOT NULL,
+    hull_length DOUBLE PRECISION NOT NULL,
+    waterline_length DOUBLE PRECISION NOT NULL,
+    beam DOUBLE PRECISION NOT NULL,
+    draft DOUBLE PRECISION NOT NULL,
+    ballast INTEGER NOT NULL,
+    displacement INTEGER NOT NULL,
+    engine_power DOUBLE PRECISION NOT NULL,
+    fuel_tank INTEGER NOT NULL,
+    water_tank INTEGER NOT NULL,
+    brochure VARCHAR(500), -- Optional
+    exterior_description TEXT NOT NULL,
+    additional_details TEXT, -- Optional
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -86,6 +87,7 @@ CREATE TABLE IF NOT EXISTS profile_image (
 );
 
 -- Create indexes for better query performance
+CREATE INDEX IF NOT EXISTS idx_boats_user_id ON boats(user_id);
 CREATE INDEX IF NOT EXISTS idx_boat_data_boat_id ON boat_data(boat_id);
 CREATE INDEX IF NOT EXISTS idx_broker_data_boat_id ON broker_data(boat_id);
 CREATE INDEX IF NOT EXISTS idx_broker_data_user_id ON broker_data(user_id);

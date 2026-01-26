@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
@@ -48,9 +48,9 @@ const RichTextEditor = ({ value, onChange, placeholder, rows = 4 }: RichTextEdit
       attributes: {
         class: "rich-text-editor-content",
         style: `min-height: ${rows * 25}px; height: auto;`,
+        "data-placeholder": placeholder || "",
       },
     },
-    placeholder,
     immediatelyRender: false, // Fix SSR hydration mismatch
   });
 

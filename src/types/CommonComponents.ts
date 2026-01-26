@@ -110,6 +110,8 @@ export interface InputBoxType {
   autoComplete?: string;
   required?: boolean;
   disabled?: boolean;
+  rightText?: string;
+  leftText?: string;
 }
 
 export interface RadioGroupType {

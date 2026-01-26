@@ -4,7 +4,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { Button, Card, CardBody, CardTitle } from "reactstrap";
 import CommonInput from "@/components/commonComponents/CommonInput";
+import DualUnitInput from "@/components/commonComponents/DualUnitInput";
 import dynamic from "next/dynamic";
+import DOMPurify from "dompurify";
 
 // Dynamically import RichTextEditor to avoid SSR issues
 const RichTextEditor = dynamic(
@@ -16,11 +18,6 @@ import Dropzone from "react-dropzone";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
     updateFormField,
-    updateFormData,
-    setImageMetadata,
-    addImageMetadata,
-    removeImageMetadata,
-    reorderImages,
     setMainImageIndex,
     setBrochureFileName,
     setBrochureUrl,
@@ -390,6 +387,7 @@ const UploadBoat = () => {
 
         // Update Redux (this will reorder both uploadedImages and metadata)
         dispatch(reorderUploadedImages({ fromIndex: draggedIndex, toIndex: dropIndex }));
+        toast.success("Image order updated");
 
         setDraggedIndex(null);
     };
@@ -397,6 +395,7 @@ const UploadBoat = () => {
     const setAsMainImage = (index: number) => {
         if (uploadedImages[index] && !uploadingImages.has(index)) {
             dispatch(setMainImageIndex(index));
+            toast.success("Main image updated");
         }
     };
 
@@ -465,25 +464,38 @@ const UploadBoat = () => {
     };
 
     const removeBrochure = async () => {
-        if (brochureUrl && uploadFolderName) {
-            const supabase = getSupabaseBrowserClient();
-            const bucketName = "boat_images";
-
-            // Extract file path from URL
-            const urlParts = brochureUrl.split(`/${bucketName}/`);
-            if (urlParts[1]) {
-                const filePath = urlParts[1].split("?")[0];
-                try {
-                    await supabase.storage.from(bucketName).remove([filePath]);
-                } catch (error) {
-                    console.error("Error deleting brochure:", error);
-                }
-            }
+        if (!brochureUrl) {
+            toast.error("No brochure to remove");
+            return;
         }
 
-        setBrochureFile(null);
-        dispatch(setBrochureFileName(null));
-        dispatch(setBrochureUrl(null));
+        const supabase = getSupabaseBrowserClient();
+        const bucketName = "boat_images";
+
+        try {
+            // Extract file path from URL
+            const urlParts = brochureUrl.split(`/${bucketName}/`);
+            if (urlParts[1] && uploadFolderName) {
+                const filePath = urlParts[1].split("?")[0];
+                const { error: deleteError } = await supabase.storage
+                    .from(bucketName)
+                    .remove([filePath]);
+
+                if (deleteError) {
+                    console.error("Error deleting brochure from storage:", deleteError);
+                    toast.error("Failed to delete brochure from storage");
+                    return;
+                }
+            }
+
+            setBrochureFile(null);
+            dispatch(setBrochureFileName(null));
+            dispatch(setBrochureUrl(null));
+            toast.success("Brochure removed successfully");
+        } catch (error: any) {
+            console.error("Error removing brochure:", error);
+            toast.error(`Failed to remove brochure: ${error?.message || "Unknown error"}`);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -494,61 +506,125 @@ const UploadBoat = () => {
             return;
         }
 
-        if (!formData.title.trim()) {
-            toast.error("Title is required");
-            return;
+        // Validate required fields
+        const requiredFields = [
+            { field: "title", label: "Title" },
+            { field: "manufacturer", label: "Manufacturer" },
+            { field: "build_number", label: "Build Number" },
+            { field: "build_year", label: "Build Year" },
+            { field: "location", label: "Location" },
+            { field: "price", label: "Price" },
+            { field: "description", label: "Description" },
+            { field: "designer", label: "Designer" },
+            { field: "hull_length", label: "Hull Length" },
+            { field: "waterline_length", label: "Waterline Length" },
+            { field: "beam", label: "Beam" },
+            { field: "draft", label: "Draft" },
+            { field: "ballast", label: "Ballast" },
+            { field: "displacement", label: "Displacement" },
+            { field: "engine_power", label: "Engine Power" },
+            { field: "fuel_tank", label: "Fuel Tank" },
+            { field: "water_tank", label: "Water Tank" },
+            { field: "exterior_description", label: "Exterior Description" },
+        ];
+
+        for (const { field, label } of requiredFields) {
+            const value = formData[field as keyof typeof formData];
+            if (!value || (typeof value === "string" && !value.trim())) {
+                toast.error(`${label} is required`);
+                return;
+            }
         }
 
         setSubmitting(true);
         const supabase = getSupabaseBrowserClient();
 
         try {
-            // Step 1: Create boat entry
+            // Get current user ID
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user?.id) {
+                toast.error("You must be logged in to upload a boat");
+                setSubmitting(false);
+                return;
+            }
+            const userId = session.user.id;
+
+            // Sanitize rich text editor fields to prevent XSS attacks
+            const sanitizeHTML = (html: string): string => {
+                if (!html || typeof html !== "string") return "";
+                // Configure DOMPurify to allow safe HTML formatting
+                return DOMPurify.sanitize(html, {
+                    ALLOWED_TAGS: [
+                        "p", "br", "strong", "em", "u", "s", "h1", "h2", "h3",
+                        "ul", "ol", "li", "a", "span", "div"
+                    ],
+                    ALLOWED_ATTR: ["href", "target", "rel", "style", "class", "color"],
+                    ALLOW_DATA_ATTR: false,
+                    KEEP_CONTENT: true,
+                });
+            };
+
+            const sanitizedDescription = sanitizeHTML(formData.description.trim());
+            const sanitizedExteriorDescription = sanitizeHTML(formData.exterior_description.trim());
+            const sanitizedAdditionalDetails = formData.additional_details.trim()
+                ? sanitizeHTML(formData.additional_details.trim())
+                : null;
+
+            // Step 1: Create boat entry with user_id
             const { data: boatData, error: boatError } = await supabase
                 .from("boats")
-                .insert({})
+                .insert({ user_id: userId })
                 .select()
                 .single();
 
-            if (boatError) throw boatError;
-            if (!boatData) throw new Error("Failed to create boat");
+            if (boatError) {
+                console.error("Error creating boat:", boatError);
+                throw new Error(`Failed to create boat: ${boatError.message}`);
+            }
+            if (!boatData) {
+                throw new Error("Failed to create boat: No data returned");
+            }
 
-            // Step 2: Create boat_data entry
+            // Step 2: Create boat_data entry (all fields except brochure and additional_details are required)
             const boatDataPayload: any = {
                 boat_id: boatData.id,
                 title: formData.title.trim(),
-                manufacturer: formData.manufacturer.trim() || null,
-                build_number: formData.build_number.trim() || null,
-                build_year: formData.build_year.trim() || null,
-                location: formData.location.trim() || null,
-                price: formData.price ? parseInt(formData.price) : null,
+                manufacturer: formData.manufacturer.trim(),
+                build_number: formData.build_number.trim(),
+                build_year: formData.build_year.trim(),
+                location: formData.location.trim(),
+                price: parseInt(formData.price),
                 vat_included: formData.vat_included,
-                dealer: formData.dealer.trim() || null,
-                description: formData.description.trim() || null,
-                designer: formData.designer.trim() || null,
-                hull_length: formData.hull_length ? parseFloat(formData.hull_length) : null,
-                waterline_length: formData.waterline_length ? parseFloat(formData.waterline_length) : null,
-                beam: formData.beam ? parseFloat(formData.beam) : null,
-                draft: formData.draft ? parseFloat(formData.draft) : null,
-                ballast: formData.ballast ? parseInt(formData.ballast) : null,
-                displacement: formData.displacement ? parseInt(formData.displacement) : null,
-                engine_power: formData.engine_power ? parseFloat(formData.engine_power) : null,
-                fuel_tank: formData.fuel_tank ? parseInt(formData.fuel_tank) : null,
-                water_tank: formData.water_tank ? parseInt(formData.water_tank) : null,
-                brochure: brochureUrl || null, // Use already uploaded brochure URL
-                exterior_description: formData.exterior_description.trim() || null,
-                additional_details: formData.additional_details.trim() || null,
+                description: sanitizedDescription,
+                designer: formData.designer.trim(),
+                hull_length: parseFloat(formData.hull_length),
+                waterline_length: parseFloat(formData.waterline_length),
+                beam: parseFloat(formData.beam),
+                draft: parseFloat(formData.draft),
+                ballast: parseInt(formData.ballast),
+                displacement: parseInt(formData.displacement),
+                engine_power: parseFloat(formData.engine_power),
+                fuel_tank: parseInt(formData.fuel_tank),
+                water_tank: parseInt(formData.water_tank),
+                brochure: brochureUrl || null, // Optional
+                exterior_description: sanitizedExteriorDescription,
+                additional_details: sanitizedAdditionalDetails, // Optional
             };
 
             const { error: boatDataError } = await supabase
                 .from("boat_data")
                 .insert(boatDataPayload);
 
-            if (boatDataError) throw boatDataError;
+            if (boatDataError) {
+                console.error("Error creating boat data:", boatDataError);
+                throw new Error(`Failed to save boat data: ${boatDataError.message}`);
+            }
 
             // Step 3: Update existing broker_data entry to link it to the boat
             const selectedDealer = brokerDataList.find(d => d.id === formData.dealer_id);
-            if (!selectedDealer) throw new Error("Selected dealer not found");
+            if (!selectedDealer) {
+                throw new Error("Selected dealer not found");
+            }
 
             // Update the existing broker_data entry with the boat_id
             const { error: brokerDataError } = await supabase
@@ -558,7 +634,10 @@ const UploadBoat = () => {
                 })
                 .eq("id", selectedDealer.id);
 
-            if (brokerDataError) throw brokerDataError;
+            if (brokerDataError) {
+                console.error("Error updating broker data:", brokerDataError);
+                throw new Error(`Failed to link dealer to boat: ${brokerDataError.message}`);
+            }
 
             // Step 4: Move temp folder to permanent boat_id folder (optional enhancement)
             // For now, we'll keep the temp folder and just create records
@@ -576,15 +655,24 @@ const UploadBoat = () => {
                     .from("boat_images")
                     .insert(imageRecords);
 
-                if (imagesError) throw imagesError;
+                if (imagesError) {
+                    console.error("Error creating boat images records:", imagesError);
+                    throw new Error(`Failed to save boat images: ${imagesError.message}`);
+                }
             }
 
             // Step 6: Update boat_data with brochure URL if uploaded
             if (brochureUrl) {
-                await supabase
+                const { error: brochureUpdateError } = await supabase
                     .from("boat_data")
                     .update({ brochure: brochureUrl })
                     .eq("boat_id", boatData.id);
+
+                if (brochureUpdateError) {
+                    console.error("Error updating brochure URL:", brochureUpdateError);
+                    // Don't throw here, as the boat is already created - just log the error
+                    toast.error("Boat created but failed to update brochure URL");
+                }
             }
 
             toast.success("Boat uploaded successfully!");
@@ -662,49 +750,55 @@ const UploadBoat = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Manufacturer</label>
+                                <label className="form-label">Manufacturer *</label>
                                 <CommonInput
                                     inputType="text"
                                     value={formData.manufacturer}
                                     onChange={(e) => handleFieldChange("manufacturer", e.target.value)}
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Build Number</label>
+                                <label className="form-label">Build Number *</label>
                                 <CommonInput
                                     inputType="text"
                                     value={formData.build_number}
                                     onChange={(e) => handleFieldChange("build_number", e.target.value)}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Build Year</label>
+                                <label className="form-label">Build Year *</label>
                                 <CommonInput
                                     inputType="text"
                                     value={formData.build_year}
                                     onChange={(e) => handleFieldChange("build_year", e.target.value)}
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Location</label>
+                                <label className="form-label">Location *</label>
                                 <CommonInput
                                     inputType="text"
                                     value={formData.location}
                                     onChange={(e) => handleFieldChange("location", e.target.value)}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Price</label>
+                                <label className="form-label">Price *</label>
                                 <CommonInput
                                     inputType="number"
                                     value={formData.price}
+                                    leftText="€"
                                     onChange={(e) => handleFieldChange("price", e.target.value)}
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -724,16 +818,7 @@ const UploadBoat = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">Dealer</label>
-                            <CommonInput
-                                inputType="text"
-                                value={formData.dealer}
-                                onChange={(e) => handleFieldChange("dealer", e.target.value)}
-                            />
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">Description *</label>
                             <RichTextEditor
                                 value={formData.description}
                                 onChange={(value) => handleFieldChange("description", value)}
@@ -742,11 +827,12 @@ const UploadBoat = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">Designer</label>
+                            <label className="form-label">Designer *</label>
                             <CommonInput
                                 inputType="text"
                                 value={formData.designer}
                                 onChange={(e) => handleFieldChange("designer", e.target.value)}
+                                required
                             />
                         </div>
 
@@ -754,65 +840,107 @@ const UploadBoat = () => {
                         <h5 className="mt-4 mb-3">Dimensions</h5>
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Hull Length (m)</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="form-control"
+                                <DualUnitInput
+                                    label="Hull Length *"
                                     value={formData.hull_length}
-                                    onChange={(e) => handleFieldChange("hull_length", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("hull_length", value)}
+                                    metricUnit="m"
+                                    imperialUnit="ft"
+                                    metricToImperial={(m: number) => m * 3.28084}
+                                    formatImperial={(ft: number) => {
+                                        const feet = Math.floor(ft);
+                                        const inches = Math.round((ft - feet) * 12);
+                                        return inches > 0 ? `${feet}'${inches}"` : `${feet}'`;
+                                    }}
+                                    type="number"
+                                    step="0.01"
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Waterline Length (m)</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="form-control"
+                                <DualUnitInput
+                                    label="Waterline Length *"
                                     value={formData.waterline_length}
-                                    onChange={(e) => handleFieldChange("waterline_length", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("waterline_length", value)}
+                                    metricUnit="m"
+                                    imperialUnit="ft"
+                                    metricToImperial={(m: number) => m * 3.28084}
+                                    formatImperial={(ft: number) => {
+                                        const feet = Math.floor(ft);
+                                        const inches = Math.round((ft - feet) * 12);
+                                        return inches > 0 ? `${feet}'${inches}"` : `${feet}'`;
+                                    }}
+                                    type="number"
+                                    step="0.01"
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Beam (m)</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="form-control"
+                                <DualUnitInput
+                                    label="Beam (max) *"
                                     value={formData.beam}
-                                    onChange={(e) => handleFieldChange("beam", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("beam", value)}
+                                    metricUnit="m"
+                                    imperialUnit="ft"
+                                    metricToImperial={(m: number) => m * 3.28084}
+                                    formatImperial={(ft: number) => {
+                                        const feet = Math.floor(ft);
+                                        const inches = Math.round((ft - feet) * 12);
+                                        return inches > 0 ? `${feet}'${inches}"` : `${feet}'`;
+                                    }}
+                                    type="number"
+                                    step="0.01"
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Draft (m)</label>
-                                <input
+                                <DualUnitInput
+                                    label="Draft *"
+                                    value={formData.draft}
+                                    onChange={(value: string) => handleFieldChange("draft", value)}
+                                    metricUnit="m"
+                                    imperialUnit="ft"
+                                    metricToImperial={(m: number) => m * 3.28084}
+                                    formatImperial={(ft: number) => {
+                                        const feet = Math.floor(ft);
+                                        const inches = Math.round((ft - feet) * 12);
+                                        return inches > 0 ? `${feet}'${inches}"` : `${feet}'`;
+                                    }}
                                     type="number"
                                     step="0.01"
-                                    className="form-control"
-                                    value={formData.draft}
-                                    onChange={(e) => handleFieldChange("draft", e.target.value)}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Ballast (kg)</label>
-                                <CommonInput
-                                    inputType="number"
+                                <DualUnitInput
+                                    label="Ballast - Std *"
                                     value={formData.ballast}
-                                    onChange={(e) => handleFieldChange("ballast", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("ballast", value)}
+                                    metricUnit="kg"
+                                    imperialUnit="lbs"
+                                    metricToImperial={(kg: number) => kg * 2.20462}
+                                    formatImperial={(lbs: number) => Math.round(lbs).toLocaleString()}
+                                    type="number"
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Displacement (kg)</label>
-                                <CommonInput
-                                    inputType="number"
+                                <DualUnitInput
+                                    label="Displacement - Light *"
                                     value={formData.displacement}
-                                    onChange={(e) => handleFieldChange("displacement", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("displacement", value)}
+                                    metricUnit="kg"
+                                    imperialUnit="lbs"
+                                    metricToImperial={(kg: number) => kg * 2.20462}
+                                    formatImperial={(lbs: number) => Math.round(lbs).toLocaleString()}
+                                    type="number"
+                                    required
                                 />
                             </div>
                         </div>
@@ -821,32 +949,46 @@ const UploadBoat = () => {
                         <h5 className="mt-4 mb-3">Engine & Tanks</h5>
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Engine Power (hp)</label>
-                                <input
+                                <DualUnitInput
+                                    label="Engine Power *"
+                                    value={formData.engine_power}
+                                    onChange={(value: string) => handleFieldChange("engine_power", value)}
+                                    metricUnit="kW"
+                                    imperialUnit="hp"
+                                    metricToImperial={(kw: number) => kw * 1.34102}
+                                    formatImperial={(hp: number) => Math.round(hp).toString()}
                                     type="number"
                                     step="0.01"
-                                    className="form-control"
-                                    value={formData.engine_power}
-                                    onChange={(e) => handleFieldChange("engine_power", e.target.value)}
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Fuel Tank (L)</label>
-                                <CommonInput
-                                    inputType="number"
+                                <DualUnitInput
+                                    label="Fuel Tank - Std *"
                                     value={formData.fuel_tank}
-                                    onChange={(e) => handleFieldChange("fuel_tank", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("fuel_tank", value)}
+                                    metricUnit="ltr"
+                                    imperialUnit="gal (US)"
+                                    metricToImperial={(ltr: number) => ltr * 0.264172}
+                                    formatImperial={(gal: number) => Math.round(gal).toString()}
+                                    type="number"
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Water Tank (L)</label>
-                                <CommonInput
-                                    inputType="number"
+                                <DualUnitInput
+                                    label="Water Tank - Std *"
                                     value={formData.water_tank}
-                                    onChange={(e) => handleFieldChange("water_tank", e.target.value)}
+                                    onChange={(value: string) => handleFieldChange("water_tank", value)}
+                                    metricUnit="ltr"
+                                    imperialUnit="gal (US)"
+                                    metricToImperial={(ltr: number) => ltr * 0.264172}
+                                    formatImperial={(gal: number) => Math.round(gal).toString()}
+                                    type="number"
+                                    required
                                 />
                             </div>
                         </div>

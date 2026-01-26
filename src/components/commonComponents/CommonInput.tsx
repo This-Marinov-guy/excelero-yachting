@@ -16,12 +16,15 @@ const CommonInput: FC<InputBoxType> = ({
   autoComplete,
   required,
   disabled,
+  rightText,
+  leftText,
 }) => {
   return (
     <div className={ColClass}>
       <div className={`${mainClass ? mainClass : ""}form-input`}>
-        {label &&<label>{label}</label>}
-        <div className={`select-button arrow-none`}>
+        {label && <label>{label}</label>}
+        <div className={`select-button arrow-none ${rightText || leftText ? "input-group" : ""}`}>
+          {leftText && <span className="input-group-text">{leftText}</span>}
           <input
             id={id}
             name={name}
@@ -35,6 +38,7 @@ const CommonInput: FC<InputBoxType> = ({
             required={required}
             disabled={disabled}
           />
+          {rightText && <span className="input-group-text">{rightText}</span>}
         </div>
       </div>
     </div>
