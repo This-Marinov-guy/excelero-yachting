@@ -289,7 +289,7 @@ const DealerInfo = ({ onDataChange }: DealerInfoProps) => {
       ) : brokerDataList.length > 0 ? (
         <div className="dealer-cards-grid">
           {brokerDataList.map((item) => (
-            <Card key={item.id} className="dealer-card">
+            <Card key={item.id} className="dealer-card mt-3">
               <CardBody>
                 <div className="d-flex justify-content-between align-items-start mb-3">
                   <div>
