@@ -508,6 +508,7 @@ const UploadBoat = () => {
 
         // Validate required fields
         const requiredFields = [
+            { field: "type", label: "Type" },
             { field: "title", label: "Title" },
             { field: "manufacturer", label: "Manufacturer" },
             { field: "build_number", label: "Build Number" },
@@ -588,6 +589,7 @@ const UploadBoat = () => {
             // Step 2: Create boat_data entry (all fields except brochure and additional_details are required)
             const boatDataPayload: any = {
                 boat_id: boatData.id,
+                type: formData.type.trim(),
                 title: formData.title.trim(),
                 manufacturer: formData.manufacturer.trim(),
                 build_number: formData.build_number.trim(),
@@ -734,6 +736,21 @@ const UploadBoat = () => {
                                         {dealer.name} {dealer.dealer ? `- ${dealer.dealer}` : ""}
                                     </option>
                                 ))}
+                            </select>
+                        </div>
+
+                        {/* Type Selection */}
+                        <div className="mb-3">
+                            <label className="form-label">Type *</label>
+                            <select
+                                className="form-control"
+                                value={formData.type}
+                                onChange={(e) => handleFieldChange("type", e.target.value)}
+                                required
+                            >
+                                <option value="">Select a type</option>
+                                <option value="racer">Racer</option>
+                                <option value="cruiser">Cruiser</option>
                             </select>
                         </div>
 

@@ -50,6 +50,7 @@ export interface UploadedImage {
 export interface BoatUploadState {
   formData: {
     dealer_id: string;
+    type: string;
     title: string;
     manufacturer: string;
     build_number: string;
@@ -84,6 +85,7 @@ const storedData = loadFromStorage();
 const initialState: BoatUploadState = storedData || {
   formData: {
     dealer_id: "",
+    type: "",
     title: "",
     manufacturer: "",
     build_number: "",

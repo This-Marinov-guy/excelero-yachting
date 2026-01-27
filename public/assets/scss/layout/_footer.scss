@@ -408,7 +408,7 @@
         .open-footer-content {
             .footer-title {
                 &::before {
-                    content: "\f1af";
+                    content: "−";
                 }
 
                 &::after {

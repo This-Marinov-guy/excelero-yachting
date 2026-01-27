@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: FilterSliceType = {
   propertyType: [],
-  priceStatus: [40000, 500000],
+  priceStatus: [0, 100000000],
   bedsRooms: [],
   sortBy: null,
   popular: null,
-  squareFeetStatus: [400, 4000],
-  yearBuiltStatus: [2019, 2024],
+  squareFeetStatus: [0, 100000],
+  yearBuiltStatus: [1900, 2030],
   amenities: [],
   carBrandModel: [],
   minAndMaxPrice: [],
@@ -32,6 +32,16 @@ const initialState: FilterSliceType = {
   JobLocation: [],
   JobTopCompanies: [],
   JobType: [],
+  // Boat filters - wide ranges to show all boats initially
+  boatType: [],
+  boatManufacturer: [],
+  boatDesigner: [],
+  boatLocation: [],
+  boatBeamStatus: [0, 100],
+  boatDraftStatus: [0, 50],
+  boatDisplacementStatus: [0, 1000000],
+  boatEnginePowerStatus: [0, 10000],
+  boatVatIncluded: null,
 };
 
 const FiltersSlice = createSlice({
@@ -128,6 +138,34 @@ const FiltersSlice = createSlice({
     setJobType: (state, action) => {
       state.JobType = action.payload;
     },
+    // Boat filter actions
+    setBoatType: (state, action) => {
+      state.boatType = action.payload;
+    },
+    setBoatManufacturer: (state, action) => {
+      state.boatManufacturer = action.payload;
+    },
+    setBoatDesigner: (state, action) => {
+      state.boatDesigner = action.payload;
+    },
+    setBoatLocation: (state, action) => {
+      state.boatLocation = action.payload;
+    },
+    setBoatBeamStatus: (state, action) => {
+      action.payload ? (state.boatBeamStatus = [...action.payload]) : state.boatBeamStatus.splice(0, state.boatBeamStatus.length);
+    },
+    setBoatDraftStatus: (state, action) => {
+      action.payload ? (state.boatDraftStatus = [...action.payload]) : state.boatDraftStatus.splice(0, state.boatDraftStatus.length);
+    },
+    setBoatDisplacementStatus: (state, action) => {
+      action.payload ? (state.boatDisplacementStatus = [...action.payload]) : state.boatDisplacementStatus.splice(0, state.boatDisplacementStatus.length);
+    },
+    setBoatEnginePowerStatus: (state, action) => {
+      action.payload ? (state.boatEnginePowerStatus = [...action.payload]) : state.boatEnginePowerStatus.splice(0, state.boatEnginePowerStatus.length);
+    },
+    setBoatVatIncluded: (state, action) => {
+      state.boatVatIncluded = action.payload;
+    },
     removeFilter: (state, action: PayloadAction<{ label: string; value: any }>) => {
       const { label, value } = action.payload;
     
@@ -156,6 +194,6 @@ const FiltersSlice = createSlice({
   },
 });
 
-export const { setPropertyType, setSortBy, setPopular, setPriceStatus, setBedsRooms, setSquareFeetStatus, setYearBuiltStatus, setAmenities, setCarBrandModel, setMinAndMaxPrice, setBudgetStatus, setCategories, setFuelType, setModelYear, setSeats, setColor, setKmsDriven, setMinAndMaxKilometers, setTransmissions, setOwner, setJobAllCategory, setMinAndMaxSalary, setSalaryStatus, setJobWorkMode, setJobCompanyType, setJobEducation, setJobByCheck, setJobLocation, setJobTopCompanies, setJobType, removeFilter, clearAllFilters } = FiltersSlice.actions;
+export const { setPropertyType, setSortBy, setPopular, setPriceStatus, setBedsRooms, setSquareFeetStatus, setYearBuiltStatus, setAmenities, setCarBrandModel, setMinAndMaxPrice, setBudgetStatus, setCategories, setFuelType, setModelYear, setSeats, setColor, setKmsDriven, setMinAndMaxKilometers, setTransmissions, setOwner, setJobAllCategory, setMinAndMaxSalary, setSalaryStatus, setJobWorkMode, setJobCompanyType, setJobEducation, setJobByCheck, setJobLocation, setJobTopCompanies, setJobType, setBoatType, setBoatManufacturer, setBoatDesigner, setBoatLocation, setBoatBeamStatus, setBoatDraftStatus, setBoatDisplacementStatus, setBoatEnginePowerStatus, setBoatVatIncluded, removeFilter, clearAllFilters } = FiltersSlice.actions;
 
 export default FiltersSlice.reducer;

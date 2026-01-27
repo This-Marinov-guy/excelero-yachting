@@ -19,6 +19,7 @@ const RatioImage: React.FC<RatioImageType> = (props) => {
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
+          height: 400px;
           display: block;
           `
         );

@@ -55,7 +55,6 @@ const FilterTags: FC<TopPanelType> = ({ topFilter, side, type, mainClass }) => {
                 </Link>
               )}
               <div className='category-filter'>
-                <span>Sort By :</span>
                 {FilterDropdown(3, 8)}
               </div>
             </div>
@@ -63,7 +62,7 @@ const FilterTags: FC<TopPanelType> = ({ topFilter, side, type, mainClass }) => {
         ) : (
           <Fragment>
             <h4>
-              {totalProduct} {type === "property" ? "properties in Amsterdam" : type === "job" ? "All 980 jobs got found" : "Cars To Explore"}
+              {totalProduct} {type === "property" ? "properties in Amsterdam" : type === "job" ? "All 980 jobs got found" : type === "boat" ? "boats found" : "Cars To Explore"}
             </h4>
             {type === "property" ? (
               <Fragment>
@@ -77,7 +76,6 @@ const FilterTags: FC<TopPanelType> = ({ topFilter, side, type, mainClass }) => {
             ) : (
               <div className='category-filter'>
                 <div className='car-sortby-flex'>
-                  <span>Sort By :</span>
                   {FilterDropdown(3, 8)}
                 </div>
                 {!topFilter && (

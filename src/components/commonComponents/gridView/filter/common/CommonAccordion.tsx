@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setAmenities, setBedsRooms, setCategories, setColor, setFuelType, setJobAllCategory, setJobByCheck, setJobCompanyType, setJobEducation, setJobLocation, setJobTopCompanies, setJobType, setJobWorkMode, setModelYear, setOwner, setPropertyType, setSeats, setSquareFeetStatus, setTransmissions, setYearBuiltStatus } from "@/redux/reducers/FilterSlice";
+import { setAmenities, setBedsRooms, setCategories, setColor, setFuelType, setJobAllCategory, setJobByCheck, setJobCompanyType, setJobEducation, setJobLocation, setJobTopCompanies, setJobType, setJobWorkMode, setModelYear, setOwner, setPropertyType, setSeats, setSquareFeetStatus, setTransmissions, setYearBuiltStatus, setBoatManufacturer, setBoatDesigner, setBoatLocation, setBoatBeamStatus, setBoatDraftStatus, setBoatDisplacementStatus, setBoatEnginePowerStatus, setBoatVatIncluded } from "@/redux/reducers/FilterSlice";
 import { CommonFilterType } from "@/types/Product";
 import { ChangeEvent, FC } from "react";
 import { AccordionBody, AccordionHeader, AccordionItem, Input, Label } from "reactstrap";
@@ -10,7 +10,7 @@ import RangeInputFields from "./RangeInputFields";
 
 const CommonFilter: FC<CommonFilterType> = ({ title, colors, id, data, checkValue, priceRange, squareFeet, values, modalType, type, radio }) => {
   const dispatch = useAppDispatch();
-  const { propertyType, bedsRooms, amenities, categories, fuelType, modelYear, seats, color, carTransmissions, ownerDetail, jobAllCategory, JobWorkMode, JobCompanyType, JobEducation, JobCheck, JobLocation, JobTopCompanies, JobType } = useAppSelector(state => state.filter);
+  const { propertyType, bedsRooms, amenities, categories, fuelType, modelYear, seats, color, carTransmissions, ownerDetail, jobAllCategory, JobWorkMode, JobCompanyType, JobEducation, JobCheck, JobLocation, JobTopCompanies, JobType, boatManufacturer, boatDesigner, boatLocation, boatBeamStatus, boatDraftStatus, boatDisplacementStatus, boatEnginePowerStatus, boatVatIncluded } = useAppSelector(state => state.filter);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>, title: string, field?: string) => {
     const value = event.target.value;
@@ -65,6 +65,22 @@ const CommonFilter: FC<CommonFilterType> = ({ title, colors, id, data, checkValu
       Location: () => dispatch(setJobLocation(actionCreator(JobLocation))),
       "Top Companies": () => dispatch(setJobTopCompanies(actionCreator(JobTopCompanies))),
       "Job Type": () => dispatch(setJobType(actionCreator(JobType))),
+      // Boat filters
+      "Manufacturer": () => dispatch(setBoatManufacturer(actionCreator(boatManufacturer))),
+      "Designer": () => dispatch(setBoatDesigner(actionCreator(boatDesigner))),
+      "Location": () => {
+        if (type === "boat") {
+          dispatch(setBoatLocation(actionCreator(boatLocation)));
+        } else {
+          dispatch(setJobLocation(actionCreator(JobLocation)));
+        }
+      },
+      "Beam (m)": () => dispatch(setBoatBeamStatus(actionCreator())),
+      "Draft (m)": () => dispatch(setBoatDraftStatus(actionCreator())),
+      "Displacement (kg)": () => dispatch(setBoatDisplacementStatus(actionCreator())),
+      "Engine Power (hp)": () => dispatch(setBoatEnginePowerStatus(actionCreator())),
+      "VAT Status": () => dispatch(setBoatVatIncluded(value === "true" ? true : value === "false" ? false : null)),
+      "Hull Length (m)": () => dispatch(setSquareFeetStatus(actionCreator())),
     };
 
     updateState[title as keyof typeof updateState]?.();
@@ -95,7 +111,7 @@ const CommonFilter: FC<CommonFilterType> = ({ title, colors, id, data, checkValu
               <Input type="number" placeholder="Max" value={values ? values[1] : 0} onChange={event => handleCheckboxChange(event, title, "max")} />
             </div>
           </div>
-        ) : type === "car" || type === "job" ? (
+        ) : type === "car" || type === "job" || type === "boat" ? (
           <div className={`sidebar-choose-list categories-list ${colors ? "filter-color" : ""}`}>
             {data?.map((item, index) => (
               <div className="main-choose-item" key={index}>

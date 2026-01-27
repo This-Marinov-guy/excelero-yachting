@@ -54,7 +54,7 @@
     right: -60px;
 
     &::after {
-      content: "\ea6e";
+      content: "›";
     }
   }
 
@@ -62,7 +62,7 @@
     left: -60px;
 
     &::after {
-      content: "\ea64";
+      content: "‹";
       border-radius: 0 20px 20px 0;
     }
   }
@@ -201,7 +201,7 @@
     right: 5px;
 
     &::after {
-      content: "\ea6e";
+      content: "›";
     }
   }
 
@@ -209,7 +209,7 @@
     left: 5px;
 
     &::after {
-      content: "\ea64";
+      content: "‹";
     }
   }
 }

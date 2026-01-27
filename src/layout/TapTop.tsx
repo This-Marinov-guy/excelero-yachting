@@ -3,6 +3,7 @@ import { Button } from "reactstrap";
 import { PathTypes } from "../types/Layout";
 import { ImagePath } from "@/constants";
 import Image from "next/image";
+import { ArrowUp } from "lucide-react";
 
 const TapTop: React.FC<PathTypes> = ({ part }) => {
   const [tapTopStyle, setTapTopStyle] = useState(false);
@@ -24,7 +25,7 @@ const TapTop: React.FC<PathTypes> = ({ part }) => {
   return (
     <div className={`tap-to-tap ${isJobOrProperty ? (part === 'job' ? "job-color-change" : "") : "car-top"} ${tapTopStyle ? " show" : ""}`}>
       <Button color="transparent" onClick={executeScroll} className={isJobOrProperty ? "top-box" : ""}>
-        {isJobOrProperty ? <i className="ri-arrow-up-line" /> : <Image height={100} width={100} src={`${ImagePath}/${part?.includes("car-2") ? "car2" : "car"}/tap-to-top.png`} alt="car-top" className="img-fluid" />}
+        {isJobOrProperty ? <ArrowUp className="h-6 w-6" /> : <Image height={100} width={100} src={`${ImagePath}/${part?.includes("car-2") ? "car2" : "car"}/tap-to-top.png`} alt="car-top" className="img-fluid" />}
       </Button>
     </div>
   );

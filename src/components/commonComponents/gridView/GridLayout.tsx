@@ -1,4 +1,6 @@
 import CarProductBox1 from "@/components/commonComponents/productBox/CarProductBox1";
+import Boat1DetailBox from "@/components/commonComponents/productBox/Boat1DetailBox";
+import Boat2DetailBox from "@/components/commonComponents/productBox/Boat2DetailBox";
 import Job4DetailBox from "@/components/commonComponents/productBox/Job4DetailBox";
 import NotFound from "@/components/commonComponents/productBox/NotFound";
 import Property1DetailBox from "@/components/commonComponents/productBox/Property1DetailBox";
@@ -11,6 +13,7 @@ import { Swiper as SwiperType } from "swiper";
 import { GridLayoutType, ProductType } from "@/types/Product";
 import Pagination from "./filter/Pagination";
 import UseFilterCar from "./UseFilterCar";
+import UseFilterBoats from "./UseFilterBoats";
 import UseFilterJob from "./UseFilterJob";
 import UseFilterProperty from "./UseFilterProperty";
 import Job5DetailBox from "@/components/commonComponents/productBox/Job5DetailBox";
@@ -33,6 +36,9 @@ const GridLayout: FC<GridLayoutType> = ({ value, type, gridType, gridSize, view,
       break;
     case "car":
       filteredProducts = UseFilterCar({ value });
+      break;
+    case "boat":
+      filteredProducts = UseFilterBoats({ value });
       break;
     case "job":
       filteredProducts = UseFilterJob({ value });
@@ -110,6 +116,8 @@ const GridLayout: FC<GridLayoutType> = ({ value, type, gridType, gridSize, view,
         return <Property1DetailBox data={data} view={view} />;
       case "car":
         return <CarProductBox1 data={data} view={view} gridType={gridType} />;
+      case "boat":
+        return <Boat2DetailBox data={data} label="For Sale" index={index} />;
       case "job":
         return (
           <>
@@ -149,7 +157,7 @@ const GridLayout: FC<GridLayoutType> = ({ value, type, gridType, gridSize, view,
     <div className={`${map ? "col-xl-6" : ""} ${scrollType === "load-more" ? "featured-wrapper" : ""}`}>
       <Row className={RowData}>
         {renderContent()}
-        {showProduct.length === 0 && <NotFound word="No Property found" />}
+        {showProduct.length === 0 && <NotFound word="No Boats found" />}
       </Row>
 
       {scrollType === "load-more" ? (

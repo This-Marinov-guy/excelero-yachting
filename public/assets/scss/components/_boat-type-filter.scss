@@ -1,0 +1,180 @@
+// Boat Type Filter Styles
+.boat-type-filter {
+    padding: 30px 0;
+
+    .filter-title {
+        color: #fff;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .boat-type-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+    }
+
+    .boat-type-card {
+        position: relative;
+        width: 250px;
+        height: 200px;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 4px solid transparent;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        &.selected {
+            border: 4px solid var(--theme-color);
+            box-shadow: 0 8px 30px rgba(var(--theme-color-rgb), 0.5);
+            
+            // Add a subtle outer glow for extra visibility
+            &::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                border-radius: 12px;
+                background: var(--theme-color);
+                opacity: 0.3;
+                z-index: -1;
+                filter: blur(4px);
+            }
+        }
+
+        .boat-type-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+
+            .boat-type-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+                z-index: 1;
+            }
+
+            .boat-type-content {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 20px;
+                z-index: 2;
+                text-align: center;
+
+                h5 {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    margin: 0;
+                    color: #fff;
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                    transition: color 0.3s ease;
+                }
+            }
+
+            .selected-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(var(--theme-color-rgb), 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease;
+                z-index: 3;
+
+                i {
+                    font-size: 3rem;
+                    color: #fff;
+                    animation: checkScale 0.3s ease;
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                }
+            }
+        }
+
+        &:hover .boat-type-image img {
+            transform: scale(1.1);
+        }
+
+        &.selected .boat-type-content h5 {
+            color: #fff;
+        }
+
+        &:focus {
+            outline: 3px solid var(--theme-color);
+            outline-offset: 2px;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes checkScale {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+// Dark theme support
+[data-theme="dark"] {
+    .boat-type-card {
+        background: rgba(30, 30, 30, 0.95);
+
+        .boat-type-content {
+            h3 {
+                color: #fff;
+            }
+
+            p {
+                color: #ccc;
+            }
+        }
+    }
+}

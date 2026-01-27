@@ -3,6 +3,7 @@ import { Href } from "@/constants";
 import { PaginationProps } from "@/types/Product";
 import Link from "next/link";
 import React, { FC } from "react";
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, type }) => {
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -17,7 +18,7 @@ const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange
     <ul className={`pagination ${type === "job" ? "pagination-style-1 justify-content-center" : ""}`}>
       <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
         <Link scroll={false} className='page-link' href={Href} aria-label='Previous' onClick={() => handlePageChange(currentPage - 1)}>
-          <i className='ri-arrow-left-double-fill' />
+          <ChevronsLeft className='h-4 w-4' />
         </Link>
       </li>
       {pages.map((page) => (
@@ -29,7 +30,7 @@ const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange
       ))}
       <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
         <Link scroll={false} className='page-link' href={Href} aria-label='Next' onClick={() => handlePageChange(currentPage + 1)}>
-          <i className='ri-arrow-right-double-fill' />
+          <ChevronsRight className='h-4 w-4' />
         </Link>
       </li>
     </ul>

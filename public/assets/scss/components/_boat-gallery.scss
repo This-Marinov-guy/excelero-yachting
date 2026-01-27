@@ -1,0 +1,95 @@
+// Boat Gallery Carousel Styles
+.boat-gallery-carousel {
+  margin-bottom: 2rem;
+  
+  .swiper-slide {
+    height: auto;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: var(--theme-color);
+    background: rgba(255, 255, 255, 0.9);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    
+    &::after {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
+    &:hover {
+      background: var(--theme-color);
+      color: #fff;
+    }
+  }
+  
+  .swiper-pagination-bullet {
+    background: var(--theme-color);
+    opacity: 0.5;
+    
+    &.swiper-pagination-bullet-active {
+      opacity: 1;
+    }
+  }
+}
+
+.boat-gallery-item {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    
+    .boat-gallery-overlay {
+      opacity: 1;
+    }
+  }
+  
+  .boat-gallery-image {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover .boat-gallery-image {
+    transform: scale(1.05);
+  }
+}
+
+.boat-gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  
+  i {
+    font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .boat-gallery-item {
+    height: 200px;
+  }
+  
+  .boat-gallery-overlay i {
+    font-size: 2rem;
+  }
+}

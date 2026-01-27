@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { FC, Fragment } from "react";
 import { Col, Container, Row } from "reactstrap";
+import { ChevronsRight } from "lucide-react";
 
 const JobDetailBreadcrumb: FC<{ detailType?: string }> = ({ detailType }) => {
   return (
@@ -56,11 +57,11 @@ const JobDetailBreadcrumb: FC<{ detailType?: string }> = ({ detailType }) => {
                   <ul className='breadcrumb-type-list'>
                     <li>Home</li>
                     <li>
-                      <i className='ri-arrow-right-double-fill' />
+                      <ChevronsRight className='h-4 w-4' />
                     </li>
                     <li>Collection</li>
                     <li>
-                      <i className='ri-arrow-right-double-fill' />
+                      <ChevronsRight className='h-4 w-4' />
                     </li>
                     <li>Single-job</li>
                   </ul>

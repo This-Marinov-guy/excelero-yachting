@@ -556,8 +556,8 @@ input[type="checkbox"] {
   border-radius: 5px;
 
   &::before {
-    content: "\eb7b";
-    font-family: remixicon !important;
+    content: "✓";
+    font-family: inherit;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     top: 50%;
@@ -638,12 +638,12 @@ input[type="radio"] {
       font-weight: 100;
       transform: none;
       color: rgba(var(--content-color), 1);
-      content: "\ea78";
+      content: "−";
     }
 
     &.collapsed {
       &::after {
-        content: "\ea4e";
+        content: "+";
       }
     }
 
@@ -891,8 +891,8 @@ input[type="radio"] {
         transition: 0.4s ease;
 
         &::before {
-          content: "\eb7b";
-          font-family: remixicon !important;
+          content: "✓";
+          font-family: inherit;
           font-style: normal;
           -webkit-font-smoothing: antialiased;
           top: 50%;
@@ -1034,9 +1034,9 @@ input[type="radio"] {
       }
 
       &::after {
-        content: "\ea13";
+        content: "+";
         background-image: none;
-        font-family: remixicon !important;
+        font-family: inherit;
         font-style: normal;
         -webkit-font-smoothing: antialiased;
         width: 20px;
@@ -1045,6 +1045,7 @@ input[type="radio"] {
         align-items: center;
         justify-content: center;
         font-size: 20px;
+        font-weight: 300;
 
         [dir="rtl"] & {
           margin-right: auto;
@@ -1060,7 +1061,7 @@ input[type="radio"] {
         border-bottom-color: transparent;
 
         &::after {
-          content: "\f1af";
+          content: "−";
         }
       }
     }

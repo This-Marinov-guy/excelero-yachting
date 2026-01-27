@@ -50,6 +50,31 @@ export interface ProductType {
   topCompanies?: string;
   skills?: string[];
   moreDescription?: string;
+  // Boat-specific fields
+  boatId?: string;
+  manufacturer?: string;
+  designer?: string;
+  buildNumber?: string;
+  buildYear?: string;
+  beam?: number;
+  draft?: number;
+  hullLength?: number;
+  waterlineLength?: number;
+  ballast?: number;
+  displacement?: number;
+  enginePower?: number;
+  fuelTank?: number;
+  waterTank?: number;
+  vatIncluded?: boolean;
+  dealer?: string;
+  boatType?: string; // Boat type: racer or cruiser
+  exteriorDescription?: string;
+  additionalDetails?: string;
+  brochure?: string;
+  brokerName?: string;
+  brokerEmail?: string;
+  brokerPhone?: string;
+  brokerProfileImage?: string;
 }
 
 export interface ProductCardType {
@@ -118,6 +143,7 @@ export interface GridViewType {
   jobAds?:boolean;
   tagFilter?:boolean;
   fluid?:boolean;
+  initialProducts?: ProductType[];
 }
 
 export interface GridLayoutType {
@@ -193,6 +219,16 @@ export interface FilterSliceType {
   JobLocation:string[];
   JobTopCompanies:string[];
   JobType: string[];
+  // Boat filters
+  boatType: string[];
+  boatManufacturer: string[];
+  boatDesigner: string[];
+  boatLocation: string[];
+  boatBeamStatus: number[];
+  boatDraftStatus: number[];
+  boatDisplacementStatus: number[];
+  boatEnginePowerStatus: number[];
+  boatVatIncluded: boolean | null;
   [key: string]: any;
 }
 

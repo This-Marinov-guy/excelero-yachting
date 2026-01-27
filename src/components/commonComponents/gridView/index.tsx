@@ -1,3 +1,5 @@
+"use client";
+
 import CarCategory from "@/components/car/others/carTopCategory/carCategory";
 import CarTopFilter from "@/components/car/others/carTopFilter/topFilter";
 import JobRightSideBar from "@/components/job/others/jobBothSidebar/rightSide";
@@ -13,19 +15,26 @@ import FilterTags from "./filter/FilterTags";
 import GridLayout from "./GridLayout";
 import TagsShowBox from "./TagsShowBox";
 
-const GridView: FC<GridViewType> = ({ type, gridSize, gridType, view, scrollType, map, modalType, offcanvasSide, side, topFilter, sectionClass, cardShow, tagClass, mapSide, filterClass, category, filter, detailBoxStyle, tagFilter, fluid }) => {
+const GridView: FC<GridViewType> = ({ type, gridSize, gridType, view, scrollType, map, modalType, offcanvasSide, side, topFilter, sectionClass, cardShow, tagClass, mapSide, filterClass, category, filter, detailBoxStyle, tagFilter, fluid, initialProducts }) => {
   const { productItem } = useAppSelector((state) => state.product);
   const { openFilterSidebar } = useAppSelector((state) => state.layout);
   const dispatch = useAppDispatch();
   
   const showProduct = useMemo(() => {
+    // Use initialProducts if provided (for SSR), otherwise use Redux state
+    if (initialProducts && initialProducts.length > 0) {
+      return initialProducts.filter((item) => item.type === type);
+    }
     return (productItem || []).filter((item) => item.type === type);
-  }, [productItem, type]);  
+  }, [productItem, type, initialProducts]);  
 
   useEffect(() => {
-    dispatch(fetchProductApiData());
+    // Only fetch from API if no initial products provided
+    if (!initialProducts || initialProducts.length === 0) {
+      dispatch(fetchProductApiData());
+    }
     dispatch(setCardToShow(cardShow || 6));
-  }, [cardShow, dispatch]);
+  }, [cardShow, dispatch, initialProducts]);
 
   const containerClass = gridSize === 4 ? "custom-container" : fluid ? "container-fluid" : "container";
 
