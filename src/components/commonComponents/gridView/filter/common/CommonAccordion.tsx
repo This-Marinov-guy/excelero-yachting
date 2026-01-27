@@ -62,19 +62,18 @@ const CommonFilter: FC<CommonFilterType> = ({ title, colors, id, data, checkValu
       "Company Type": () => dispatch(setJobCompanyType(actionCreator(JobCompanyType))),
       Education: () => dispatch(setJobEducation(actionCreator(JobEducation))),
       By: () => dispatch(setJobByCheck(actionCreator(JobCheck))),
-      Location: () => dispatch(setJobLocation(actionCreator(JobLocation))),
-      "Top Companies": () => dispatch(setJobTopCompanies(actionCreator(JobTopCompanies))),
-      "Job Type": () => dispatch(setJobType(actionCreator(JobType))),
-      // Boat filters
-      "Manufacturer": () => dispatch(setBoatManufacturer(actionCreator(boatManufacturer))),
-      "Designer": () => dispatch(setBoatDesigner(actionCreator(boatDesigner))),
-      "Location": () => {
+      Location: () => {
         if (type === "boat") {
           dispatch(setBoatLocation(actionCreator(boatLocation)));
         } else {
           dispatch(setJobLocation(actionCreator(JobLocation)));
         }
       },
+      "Top Companies": () => dispatch(setJobTopCompanies(actionCreator(JobTopCompanies))),
+      "Job Type": () => dispatch(setJobType(actionCreator(JobType))),
+      // Boat filters
+      "Manufacturer": () => dispatch(setBoatManufacturer(actionCreator(boatManufacturer))),
+      "Designer": () => dispatch(setBoatDesigner(actionCreator(boatDesigner))),
       "Beam (m)": () => dispatch(setBoatBeamStatus(actionCreator())),
       "Draft (m)": () => dispatch(setBoatDraftStatus(actionCreator())),
       "Displacement (kg)": () => dispatch(setBoatDisplacementStatus(actionCreator())),
