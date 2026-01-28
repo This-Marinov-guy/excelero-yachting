@@ -78,7 +78,7 @@ const CommonFilter: FC<CommonFilterType> = ({ title, colors, id, data, checkValu
       "Draft (m)": () => dispatch(setBoatDraftStatus(actionCreator())),
       "Displacement (kg)": () => dispatch(setBoatDisplacementStatus(actionCreator())),
       "Engine Power (hp)": () => dispatch(setBoatEnginePowerStatus(actionCreator())),
-      "VAT Status": () => dispatch(setBoatVatIncluded(value === "true" ? true : value === "false" ? false : null)),
+      // "VAT Status": () => dispatch(setBoatVatIncluded(value === "true" ? true : value === "false" ? false : null)),
       "Hull Length (m)": () => dispatch(setSquareFeetStatus(actionCreator())),
     };
 

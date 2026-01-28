@@ -1,5 +1,5 @@
 import { getTrackBackground, Range } from "react-range";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { RangeInputFieldsType } from "@/types/Product";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { MERGE_THRESHOLD, STEP, THUMB_SIZE } from "@/constants";
@@ -8,9 +8,9 @@ import { formatPrice } from "@/utils";
 
 const RangeInputFields: FC<RangeInputFieldsType> = ({ type }) => {
   const dispatch = useAppDispatch();
-  const { minAndMaxPrice, budgetStatus, priceStatus, kmsDriven, minAndMaxKilometers, minAndMaxSalary, salaryStatus } = useAppSelector((state) => state.filter);
+  const { minAndMaxPrice, priceStatus } = useAppSelector((state) => state.filter);
   const [rangePrice, setRangePrice] = useState<number[]>([40000, 500000]);
-  const [value, setValue] = useState<number[]>(minAndMaxPrice ?? minAndMaxKilometers ?? minAndMaxSalary ?? [10, 1000000]);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const getAction = () => {
     switch (type) {
@@ -22,19 +22,37 @@ const RangeInputFields: FC<RangeInputFieldsType> = ({ type }) => {
   };
 
   const handlePriceChange = (values: number[]) => {
-    dispatch(getAction()(values));
+    // Update local state immediately for smooth UI
+    setRangePrice(values);
+    
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
+    // Set new timer to dispatch after 0.8 seconds
+    debounceTimerRef.current = setTimeout(() => {
+      dispatch(getAction()(values));
+    }, 800);
   };
 
+  // Cleanup timer on unmount
   useEffect(() => {
-    setRangePrice(type === "car" ? budgetStatus : type === "job" ? salaryStatus : type === "KMS" ? kmsDriven : priceStatus);
-    setValue((type === "KMS" ? minAndMaxKilometers : type === "job" ? minAndMaxSalary : minAndMaxPrice) ?? [10, 1000000]);
-  }, [budgetStatus, priceStatus, type, minAndMaxPrice, kmsDriven, minAndMaxKilometers, salaryStatus, minAndMaxSalary]);
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setRangePrice(priceStatus);
+  }, [priceStatus, minAndMaxPrice]);
 
   // react-range requires min < max (not equal). Ensure bounds are always valid.
   const step = type === "job" ? 1 : STEP;
-  const minBound = value?.[0] ?? 10;
-  const rawMaxBound = value?.[1] ?? 1000000;
-  const maxBound = rawMaxBound <= minBound ? minBound + step : rawMaxBound;
+  const minBound = 0;
+  const maxBound = 1000000;
 
   return (
     <Range
@@ -71,7 +89,7 @@ const RangeInputFields: FC<RangeInputFieldsType> = ({ type }) => {
           <div {...props} key={index} style={{ ...props.style, height: `${THUMB_SIZE}px`, width: `${THUMB_SIZE}px`, top: "15px", borderRadius: "4px", backgroundColor: "rgba(var(--theme-color), 1)", display: "flex", justifyContent: "center", alignItems: "center", boxShadow: "0px 2px 6px #AAA", zIndex: isMerged ? 2 : 1, }}>
             {isMerged && index === 0 ? (
               <div style={{ position: "absolute", top: "-30px", left: "50%", transform: "translateX(-50%)", color: "#fff", fontWeight: "bold", fontSize: "12px", fontFamily: "Arial,Helvetica Neue,Helvetica,sans-serif", padding: "4px", borderRadius: "4px", backgroundColor: "rgba(var(--theme-color), 1)", whiteSpace: "nowrap", }}>
-               {isSameValue
+                {isSameValue
                   ? formatPrice(rangePrice[0]) // Show single value if identical
                   : `${formatPrice(rangePrice[0])} - ${formatPrice(rangePrice[1])}`} {/* Show merged */}
                 {type === "job" ? "K" : ""}
